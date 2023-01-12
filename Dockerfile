@@ -84,7 +84,9 @@ COPY docker/custom_php.ini /usr/local/etc/php/conf.d/custom_php.ini
 COPY --from=prod-composer /var/www/html/vendor /var/www/html/vendor
 
 #- Copy in our front-end assets
-COPY --from=frontend /home/node/public/build /var/www/html/public/
+RUN mkdir -p /var/www/html/public/build/assets
+COPY --from=frontend /home/node/public/build/assets /var/www/html/public/build/assets
+COPY --from=frontend /home/node/public/build/manifest.json /var/www/html/public/build/manifest.json
 
 #- Copy in our code
 COPY . /var/www/html
