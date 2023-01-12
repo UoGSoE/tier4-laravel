@@ -1,0 +1,46 @@
+name: tier4
+recipe: laravel
+config:
+  webroot: public
+  php: '8.1'
+  cache: redis
+excludes:
+  - node_modules
+services:
+  mail:
+    type: mailhog
+    portforward: true
+    hogfrom:
+      - appserver
+  node:
+    type: node
+    build:
+      - npm install
+tooling:
+  mfs:
+    service: appserver
+    description: "Drop db, migrate and seed"
+    cmd: php artisan migrate:fresh && php artisan db:seed --class=TestDataSeeder
+  test:
+    service: appserver
+    description: "Run phpunit"
+    cmd: CI=1 php artisan test --parallel
+  testf:
+    service: appserver
+    description: "Run phpunit with --filter"
+    cmd: php artisan test --filter
+  tinker:
+    service: appserver
+    description: "Run tinker"
+    cmd: php artisan tinker
+  horizon:
+    service: appserver
+    description: "Run horizon"
+    cmd: php artisan horizon
+  fixldap:
+    service: appserver
+    description: "Set up insecure ldap"
+    user: root
+    cmd: apt-get update && apt-get install -y libldap-common && printf "\nTLS_REQCERT never\n" >> /etc/ldap/ldap.conf
+  npm:
+    service: node
