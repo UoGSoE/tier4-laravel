@@ -16,7 +16,7 @@ use Illuminate\Support\Facades\Route;
 Route::get('/login', [\App\Http\Controllers\Auth\LoginController::class, 'login'])->name('login');
 Route::post('/login', [\App\Http\Controllers\Auth\LoginController::class, 'doLogin'])->name('auth.do_login');
 
-Route::group(['middleware' => 'auth'], function () {
+Route::middleware('auth')->group(function () {
     Route::get('/', [\App\Http\Controllers\HomeController::class, 'index'])->name('home');
     Route::post('/logout', [\App\Http\Controllers\Auth\LoginController::class, 'logout'])->name('logout');
 
@@ -24,7 +24,7 @@ Route::group(['middleware' => 'auth'], function () {
 
     Route::get('/end-impersonate', [\App\Http\Controllers\Admin\ImpersonateController::class, 'destroy'])->name('impersonate.leave');
 
-    Route::group(['middleware' => 'admin.only', 'prefix' => '/admin'], function () {
+    Route::middleware('admin.only')->prefix('/admin')->group(function () {
         Route::get('/impersonate/{user}', [\App\Http\Controllers\Admin\ImpersonateController::class, 'store'])->name('impersonate');
 
         Route::get('/options', [\App\Http\Controllers\Admin\OptionsController::class, 'edit'])->name('admin.options.edit');
