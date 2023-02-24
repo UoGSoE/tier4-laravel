@@ -31,8 +31,6 @@ class ImportOldTier4 extends Command
 
     /**
      * Execute the console command.
-     *
-     * @return int
      */
     public function handle(): int
     {
