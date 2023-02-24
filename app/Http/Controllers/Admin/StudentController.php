@@ -2,13 +2,15 @@
 
 namespace App\Http\Controllers\Admin;
 
+use Illuminate\View\View;
+use Illuminate\Http\RedirectResponse;
 use App\Http\Controllers\Controller;
 use App\Models\Student;
 use Illuminate\Http\Request;
 
 class StudentController extends Controller
 {
-    public function show(Student $student)
+    public function show(Student $student): View
     {
         $student->load(['notes' => fn ($query) => $query->orderByDesc('updated_at')]);
 
@@ -17,7 +19,7 @@ class StudentController extends Controller
         ]);
     }
 
-    public function update(Student $student, Request $request)
+    public function update(Student $student, Request $request): RedirectResponse
     {
         $request->validate([
             'forenames' => 'required',

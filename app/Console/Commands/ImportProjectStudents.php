@@ -31,7 +31,7 @@ class ImportProjectStudents extends Command
      *
      * @return int
      */
-    public function handle()
+    public function handle(): int
     {
         // make an http json get call to the project database API, parse the resulting array of students and their supervisors
         // and create/update the corresponding users and students in the tier4 database

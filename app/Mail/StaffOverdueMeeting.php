@@ -29,7 +29,7 @@ class StaffOverdueMeeting extends Mailable implements ShouldQueue
      *
      * @return \Illuminate\Mail\Mailables\Envelope
      */
-    public function envelope()
+    public function envelope(): Envelope
     {
         return new Envelope(
             subject: 'Overdue Meeting',
@@ -41,7 +41,7 @@ class StaffOverdueMeeting extends Mailable implements ShouldQueue
      *
      * @return \Illuminate\Mail\Mailables\Content
      */
-    public function content()
+    public function content(): Content
     {
         return new Content(
             markdown: 'emails.staff_overdue_meeting',
@@ -53,7 +53,7 @@ class StaffOverdueMeeting extends Mailable implements ShouldQueue
      *
      * @return array
      */
-    public function attachments()
+    public function attachments(): array
     {
         return [];
     }

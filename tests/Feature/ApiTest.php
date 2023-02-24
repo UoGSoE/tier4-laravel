@@ -13,7 +13,7 @@ class ApiTest extends TestCase
     use RefreshDatabase;
 
     /** @test */
-    public function we_need_a_valid_api_key_to_make_requests()
+    public function we_need_a_valid_api_key_to_make_requests(): void
     {
         $response = $this->getJson('/api/students', [
             'Authorization' => 'Bearer invalid-key',
@@ -37,7 +37,7 @@ class ApiTest extends TestCase
     }
 
     /** @test */
-    public function we_can_get_a_list_of_all_overdue_tier4_meetings()
+    public function we_can_get_a_list_of_all_overdue_tier4_meetings(): void
     {
         config(['tier4.meeting_reminder_days' => 30]);
         config(['tier4.api_key' => 'valid-key']);
@@ -83,7 +83,7 @@ class ApiTest extends TestCase
     }
 
     /** @test */
-    public function we_can_get_a_list_of_all_overdue_tier4_meetings_for_phd_students()
+    public function we_can_get_a_list_of_all_overdue_tier4_meetings_for_phd_students(): void
     {
         config(['tier4.meeting_reminder_days' => 30]);
         config(['tier4.api_key' => 'valid-key']);
@@ -118,7 +118,7 @@ class ApiTest extends TestCase
     }
 
     /** @test */
-    public function we_can_get_a_list_of_all_overdue_tier4_meetings_for_postgrad_project_students()
+    public function we_can_get_a_list_of_all_overdue_tier4_meetings_for_postgrad_project_students(): void
     {
         config(['tier4.meeting_reminder_days' => 30]);
         config(['tier4.api_key' => 'valid-key']);
@@ -153,7 +153,7 @@ class ApiTest extends TestCase
     }
 
     /** @test */
-    public function we_can_get_a_list_of_all_students_and_their_last_meeting()
+    public function we_can_get_a_list_of_all_students_and_their_last_meeting(): void
     {
         config(['tier4.api_key' => 'valid-key']);
         $student1 = Student::factory()->create();
@@ -207,7 +207,7 @@ class ApiTest extends TestCase
     }
 
     /** @test */
-    public function we_can_get_a_list_of_all_phd_students_and_their_last_meeting()
+    public function we_can_get_a_list_of_all_phd_students_and_their_last_meeting(): void
     {
         config(['tier4.api_key' => 'valid-key']);
         $phdStudent1 = Student::factory()->create(['type' => Student::TYPE_PHD]);
@@ -250,7 +250,7 @@ class ApiTest extends TestCase
     }
 
     /** @test */
-    public function we_can_get_a_list_of_all_postgrad_project_students_and_their_last_meeting()
+    public function we_can_get_a_list_of_all_postgrad_project_students_and_their_last_meeting(): void
     {
         config(['tier4.api_key' => 'valid-key']);
         $phdStudent1 = Student::factory()->create(['type' => Student::TYPE_PHD]);
@@ -282,7 +282,7 @@ class ApiTest extends TestCase
     }
 
     /** @test */
-    public function we_can_get_a_supervisor_and_their_latest_meetings()
+    public function we_can_get_a_supervisor_and_their_latest_meetings(): void
     {
         config(['tier4.api_key' => 'valid-key']);
         $supervisor1 = User::factory()->create();
@@ -339,7 +339,7 @@ class ApiTest extends TestCase
     }
 
     /** @test */
-    public function we_can_get_all_supervisors_and_their_latest_meetings()
+    public function we_can_get_all_supervisors_and_their_latest_meetings(): void
     {
         config(['tier4.api_key' => 'valid-key']);
         $supervisor1 = User::factory()->create(['surname' => 'aaaa']); // give them surnames as we orderBy surname and makes testing easier

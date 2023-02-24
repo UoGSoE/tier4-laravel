@@ -2,12 +2,13 @@
 
 namespace App\Http\Controllers\Admin;
 
+use Illuminate\Http\RedirectResponse;
 use App\Http\Controllers\Controller;
 use App\Models\User;
 
 class ImpersonateController extends Controller
 {
-    public function store(User $user)
+    public function store(User $user): RedirectResponse
     {
         if (! auth()->user()->isAdmin()) {
             return redirect()->route('home');
@@ -18,7 +19,7 @@ class ImpersonateController extends Controller
         return redirect()->route('home');
     }
 
-    public function destroy()
+    public function destroy(): RedirectResponse
     {
         auth()->user()->leaveImpersonation();
 

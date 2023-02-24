@@ -28,7 +28,7 @@ class NotifyStaffOverdueMeetings extends Command
      *
      * @return int
      */
-    public function handle()
+    public function handle(): int
     {
         $phdAdmins = User::active()->admin()->wantsPhdEmails()->get();
         $postgradProjectAdmins = User::active()->admin()->wantsPostgradProjectEmails()->get();

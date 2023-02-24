@@ -2,12 +2,14 @@
 
 namespace App\Http\Controllers\Admin;
 
+use Illuminate\View\View;
+use Illuminate\Http\RedirectResponse;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 
 class OptionsController extends Controller
 {
-    public function edit()
+    public function edit(): View
     {
         return view('admin.options.edit', [
             'months' => [
@@ -27,7 +29,7 @@ class OptionsController extends Controller
         ]);
     }
 
-    public function update(Request $request)
+    public function update(Request $request): RedirectResponse
     {
         $request->validate([
             'postgrad_project_start_day' => 'required|integer|min:1|max:31',

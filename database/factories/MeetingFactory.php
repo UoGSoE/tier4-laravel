@@ -14,7 +14,7 @@ class MeetingFactory extends Factory
      *
      * @return array<string, mixed>
      */
-    public function definition()
+    public function definition(): array
     {
         return [
             'meeting_at' => $this->faker->dateTimeBetween('-1 year', 'now'),

@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers\Imports;
 
+use Illuminate\View\View;
+use Illuminate\Http\RedirectResponse;
 use App\Http\Controllers\Controller;
 use App\Models\Student;
 use App\Models\User;
@@ -13,12 +15,12 @@ use Ohffs\SimpleSpout\ExcelSheet;
 
 class PhdsController extends Controller
 {
-    public function create()
+    public function create(): View
     {
         return view('admin.import.phd');
     }
 
-    public function store(Request $request)
+    public function store(Request $request): RedirectResponse
     {
         $request->validate([
             'sheet' => 'required|file',

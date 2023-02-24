@@ -14,7 +14,7 @@ class ExportTest extends TestCase
     use RefreshDatabase;
 
     /** @test */
-    public function admins_can_export_a_list_of_phd_students_and_their_supervisors()
+    public function admins_can_export_a_list_of_phd_students_and_their_supervisors(): void
     {
         $admin = User::factory()->admin()->create();
 
@@ -24,7 +24,7 @@ class ExportTest extends TestCase
     }
 
     /** @test */
-    public function the_exported_spreadsheet_will_contain_the_correct_info()
+    public function the_exported_spreadsheet_will_contain_the_correct_info(): void
     {
         $admin = User::factory()->admin()->create();
         $staff1 = User::factory()->create(['username' => 'abc1x']);

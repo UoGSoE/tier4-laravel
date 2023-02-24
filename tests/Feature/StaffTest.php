@@ -12,7 +12,7 @@ class StaffTest extends TestCase
     use RefreshDatabase;
 
     /** @test */
-    public function staff_can_see_the_list_of_their_current_students()
+    public function staff_can_see_the_list_of_their_current_students(): void
     {
         $staff = User::factory()->create();
         $student1 = Student::factory()->create(['supervisor_id' => $staff->id]);
@@ -30,7 +30,7 @@ class StaffTest extends TestCase
     }
 
     /** @test */
-    public function staff_can_update_the_last_date_they_met_a_student()
+    public function staff_can_update_the_last_date_they_met_a_student(): void
     {
         $staff = User::factory()->create();
         $student1 = Student::factory()->create(['supervisor_id' => $staff->id]);
@@ -53,7 +53,7 @@ class StaffTest extends TestCase
     }
 
     /** @test */
-    public function staff_leave_a_students_date_blank_if_they_have_never_met()
+    public function staff_leave_a_students_date_blank_if_they_have_never_met(): void
     {
         $staff = User::factory()->create();
         $student1 = Student::factory()->create(['supervisor_id' => $staff->id]);
@@ -76,7 +76,7 @@ class StaffTest extends TestCase
     }
 
     /** @test */
-    public function the_dates_must_be_in_the_correct_format()
+    public function the_dates_must_be_in_the_correct_format(): void
     {
         $staff = User::factory()->create();
         $student1 = Student::factory()->create(['supervisor_id' => $staff->id]);
@@ -99,7 +99,7 @@ class StaffTest extends TestCase
     }
 
     /** @test */
-    public function staff_cant_update_the_last_date_they_met_someone_elses_student()
+    public function staff_cant_update_the_last_date_they_met_someone_elses_student(): void
     {
         $staff = User::factory()->create();
         $student1 = Student::factory()->create(['supervisor_id' => $staff->id]);

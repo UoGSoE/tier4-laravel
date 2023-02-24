@@ -20,7 +20,7 @@ class ImportOldTier4DataTest extends TestCase
     }
 
     /** @test */
-    public function we_can_import_the_old_tier4_data_into_the_system_via_an_artisan_command()
+    public function we_can_import_the_old_tier4_data_into_the_system_via_an_artisan_command(): void
     {
         $this->assertDatabaseEmpty('users');
         $this->assertDatabaseEmpty('students');

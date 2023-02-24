@@ -23,7 +23,7 @@ class OptionsTest extends TestCase
     }
 
     /** @test */
-    public function regular_users_cant_see_the_options_page()
+    public function regular_users_cant_see_the_options_page(): void
     {
         $user = User::factory()->create();
 
@@ -33,7 +33,7 @@ class OptionsTest extends TestCase
     }
 
     /** @test */
-    public function admin_users_can_see_the_options_page()
+    public function admin_users_can_see_the_options_page(): void
     {
         $user = User::factory()->admin()->create();
 
@@ -44,7 +44,7 @@ class OptionsTest extends TestCase
     }
 
     /** @test */
-    public function regular_users_cant_change_any_options()
+    public function regular_users_cant_change_any_options(): void
     {
         $user = User::factory()->create();
 
@@ -57,7 +57,7 @@ class OptionsTest extends TestCase
     }
 
     /** @test */
-    public function admins_can_change_various_options()
+    public function admins_can_change_various_options(): void
     {
         $admin = User::factory()->admin()->create();
 
@@ -81,7 +81,7 @@ class OptionsTest extends TestCase
     }
 
     /** @test */
-    public function admins_cant_change_various_options_to_garbage_values()
+    public function admins_cant_change_various_options_to_garbage_values(): void
     {
         $admin = User::factory()->admin()->create();
 

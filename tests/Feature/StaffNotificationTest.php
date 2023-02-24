@@ -23,7 +23,7 @@ class StaffNotificationTest extends TestCase
     }
 
     /** @test */
-    public function staff_are_notified_about_students_they_havent_met_with_in_some_time()
+    public function staff_are_notified_about_students_they_havent_met_with_in_some_time(): void
     {
         Mail::fake();
         $staff = User::factory()->create();
@@ -51,7 +51,7 @@ class StaffNotificationTest extends TestCase
     }
 
     /** @test */
-    public function staff_are_not_notified_about_students_marked_as_silenced()
+    public function staff_are_not_notified_about_students_marked_as_silenced(): void
     {
         Mail::fake();
         $staff = User::factory()->create();
@@ -72,7 +72,7 @@ class StaffNotificationTest extends TestCase
     }
 
     /** @test */
-    public function inactive_staff_are_not_notified()
+    public function inactive_staff_are_not_notified(): void
     {
         Mail::fake();
         $staff = User::factory()->create(['is_active' => false]);
@@ -94,7 +94,7 @@ class StaffNotificationTest extends TestCase
     }
 
     /** @test */
-    public function staff_arent_notified_about_inactive_students_they_havent_met_with_in_some_time()
+    public function staff_arent_notified_about_inactive_students_they_havent_met_with_in_some_time(): void
     {
         Mail::fake();
         $staff = User::factory()->create();
@@ -121,7 +121,7 @@ class StaffNotificationTest extends TestCase
     }
 
     /** @test */
-    public function staff_are_only_notified_about_msc_project_students_between_certain_dates()
+    public function staff_are_only_notified_about_msc_project_students_between_certain_dates(): void
     {
         Mail::fake();
         // note: fixing the date to 1st July 2020 so we don't hit a logic edge case where the year changes at the end of december/beginning of january
@@ -177,7 +177,7 @@ class StaffNotificationTest extends TestCase
     }
 
     /** @test */
-    public function admins_can_optionally_be_copied_in_to_the_staff_notifications()
+    public function admins_can_optionally_be_copied_in_to_the_staff_notifications(): void
     {
         Mail::fake();
         // note: fixing the date to 1st July 2020 so we don't hit a logic edge case where the year changes at the end of december/beginning of january

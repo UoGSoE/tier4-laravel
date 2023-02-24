@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers\Auth;
 
+use Illuminate\View\View;
+use Illuminate\Http\RedirectResponse;
 use App\Http\Controllers\Controller;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -17,7 +19,7 @@ class LoginController extends Controller
         $this->middleware('guest')->except('logout');
     }
 
-    public function login()
+    public function login(): View
     {
         return view('auth.login');
     }
@@ -27,7 +29,7 @@ class LoginController extends Controller
         return $this->attemptLogin($request);
     }
 
-    public function logout()
+    public function logout(): RedirectResponse
     {
         Auth::logout();
 

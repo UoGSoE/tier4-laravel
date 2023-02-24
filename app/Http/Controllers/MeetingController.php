@@ -2,12 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Http\RedirectResponse;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 
 class MeetingController extends Controller
 {
-    public function store(Request $request)
+    public function store(Request $request): RedirectResponse
     {
         $validStudentIds = $request->user()->students->pluck('id');
 

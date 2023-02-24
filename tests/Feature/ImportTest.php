@@ -15,7 +15,7 @@ class ImportTest extends TestCase
     use RefreshDatabase;
 
     /** @test */
-    public function regular_users_cant_see_the_import_phd_students_page()
+    public function regular_users_cant_see_the_import_phd_students_page(): void
     {
         $user = User::factory()->create();
 
@@ -25,7 +25,7 @@ class ImportTest extends TestCase
     }
 
     /** @test */
-    public function admin_staff_can_see_the_import_phd_students_page()
+    public function admin_staff_can_see_the_import_phd_students_page(): void
     {
         $admin = User::factory()->admin()->create();
 
@@ -36,7 +36,7 @@ class ImportTest extends TestCase
     }
 
     /** @test */
-    public function admin_staff_can_import_a_spreadsheet_of_phd_students_and_their_supervisors()
+    public function admin_staff_can_import_a_spreadsheet_of_phd_students_and_their_supervisors(): void
     {
         $admin = User::factory()->admin()->create();
         $staff1 = User::factory()->create(['username' => 'abc1x']);
@@ -78,7 +78,7 @@ class ImportTest extends TestCase
     }
 
     /** @test */
-    public function the_email_columns_must_be_valid_email_addresses()
+    public function the_email_columns_must_be_valid_email_addresses(): void
     {
         $admin = User::factory()->admin()->create();
         $staff1 = User::factory()->create(['username' => 'abc1x']);
@@ -103,7 +103,7 @@ class ImportTest extends TestCase
     }
 
     /** @test */
-    public function there_is_a_scheduled_task_to_import_project_students_and_supervisors_from_the_project_db_api()
+    public function there_is_a_scheduled_task_to_import_project_students_and_supervisors_from_the_project_db_api(): void
     {
         $this->assertCommandIsScheduled('tier4:import-project-students');
 
@@ -173,7 +173,7 @@ class ImportTest extends TestCase
     }
 
     /** @test */
-    public function invalid_data_from_the_api_is_discarded()
+    public function invalid_data_from_the_api_is_discarded(): void
     {
         $this->assertCommandIsScheduled('tier4:import-project-students');
 

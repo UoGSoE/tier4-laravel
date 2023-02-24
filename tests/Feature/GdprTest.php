@@ -14,7 +14,7 @@ class GdprTest extends TestCase
     use RefreshDatabase;
 
     /** @test */
-    public function admins_can_export_all_data_about_a_student_as_a_json_file()
+    public function admins_can_export_all_data_about_a_student_as_a_json_file(): void
     {
         $admin = User::factory()->admin()->create();
         $student = Student::factory()->create();
@@ -66,7 +66,7 @@ class GdprTest extends TestCase
     }
 
     /** @test */
-    public function admins_can_export_all_data_about_a_staffmember_as_a_json_file()
+    public function admins_can_export_all_data_about_a_staffmember_as_a_json_file(): void
     {
         $admin = User::factory()->admin()->create();
         $staff = User::factory()->create();
@@ -99,7 +99,7 @@ class GdprTest extends TestCase
     }
 
     /** @test */
-    public function regular_users_cant_do_gdpr_exports()
+    public function regular_users_cant_do_gdpr_exports(): void
     {
         $student = Student::factory()->create();
         $staff = User::factory()->create();

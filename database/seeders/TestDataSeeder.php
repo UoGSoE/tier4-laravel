@@ -15,7 +15,7 @@ class TestDataSeeder extends Seeder
      *
      * @return void
      */
-    public function run()
+    public function run(): void
     {
         $admin = User::factory()->admin()->has(Student::factory()->count(rand(1, 15)))->create([
             'username' => 'admin',

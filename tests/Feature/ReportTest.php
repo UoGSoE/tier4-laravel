@@ -21,7 +21,7 @@ class ReportTest extends TestCase
     }
 
     /** @test */
-    public function admins_can_see_a_list_of_overdue_phd_students()
+    public function admins_can_see_a_list_of_overdue_phd_students(): void
     {
         $admin = User::factory()->admin()->create();
         $staff1 = User::factory()->create();
@@ -48,7 +48,7 @@ class ReportTest extends TestCase
     }
 
     /** @test */
-    public function admins_can_see_a_list_of_overdue_postgrad_project_students()
+    public function admins_can_see_a_list_of_overdue_postgrad_project_students(): void
     {
         $admin = User::factory()->admin()->create();
         $staff1 = User::factory()->create();
@@ -76,7 +76,7 @@ class ReportTest extends TestCase
     }
 
     /** @test */
-    public function admins_can_filter_the_list_of_students_in_various_ways()
+    public function admins_can_filter_the_list_of_students_in_various_ways(): void
     {
         $admin = User::factory()->admin()->create();
         $staff1 = User::factory()->create(['surname' => 'zzzzzzzzz']);
@@ -137,7 +137,7 @@ class ReportTest extends TestCase
     }
 
     /** @test */
-    public function admins_can_see_a_list_of_all_meetings_for_a_given_student()
+    public function admins_can_see_a_list_of_all_meetings_for_a_given_student(): void
     {
         $admin = User::factory()->admin()->create();
         $staff1 = User::factory()->create();
@@ -162,7 +162,7 @@ class ReportTest extends TestCase
     }
 
     /** @test */
-    public function admins_can_see_a_list_of_all_meetings_for_a_given_supervisor()
+    public function admins_can_see_a_list_of_all_meetings_for_a_given_supervisor(): void
     {
         $admin = User::factory()->admin()->create();
         $staff1 = User::factory()->create();
@@ -190,7 +190,7 @@ class ReportTest extends TestCase
     }
 
     /** @test */
-    public function admins_can_see_a_list_of_all_the_latest_meetings_for_all_supervisors()
+    public function admins_can_see_a_list_of_all_the_latest_meetings_for_all_supervisors(): void
     {
         $admin = User::factory()->admin()->create();
         $staff1 = User::factory()->create();
@@ -221,7 +221,7 @@ class ReportTest extends TestCase
     }
 
     /** @test */
-    public function admins_can_filter_the_list_of_supervisors_on_the_report()
+    public function admins_can_filter_the_list_of_supervisors_on_the_report(): void
     {
         $admin = User::factory()->admin()->create();
         $staff1 = User::factory()->create(['surname' => 'staff1']);

@@ -13,7 +13,7 @@ class AdminTest extends TestCase
     use RefreshDatabase;
 
     /** @test */
-    public function admin_can_see_the_profile_of_an_individual_student()
+    public function admin_can_see_the_profile_of_an_individual_student(): void
     {
         $admin = User::factory()->admin()->create();
         $student = Student::factory()->create();
@@ -27,7 +27,7 @@ class AdminTest extends TestCase
     }
 
     /** @test */
-    public function admins_can_edit_a_students_information()
+    public function admins_can_edit_a_students_information(): void
     {
         $admin = User::factory()->admin()->create();
         $student = Student::factory()->create();
@@ -58,7 +58,7 @@ class AdminTest extends TestCase
     }
 
     /** @test */
-    public function admins_cant_edit_a_students_information_with_duff_data()
+    public function admins_cant_edit_a_students_information_with_duff_data(): void
     {
         $admin = User::factory()->admin()->create();
         $student = Student::factory()->create(['email' => 'student@example.com']);
@@ -86,7 +86,7 @@ class AdminTest extends TestCase
     }
 
     /** @test */
-    public function admins_can_edit_notes()
+    public function admins_can_edit_notes(): void
     {
         $admin = User::factory()->admin()->create();
         $student = Student::factory()->create();
@@ -113,7 +113,7 @@ class AdminTest extends TestCase
     }
 
     /** @test */
-    public function admins_can_delete_notes_from_students()
+    public function admins_can_delete_notes_from_students(): void
     {
         $admin = User::factory()->admin()->create();
         $student = Student::factory()->create();

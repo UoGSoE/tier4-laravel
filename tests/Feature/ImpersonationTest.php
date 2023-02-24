@@ -11,7 +11,7 @@ class ImpersonationTest extends TestCase
     use RefreshDatabase;
 
     /** @test */
-    public function admin_users_can_impersonate_members_of_staff()
+    public function admin_users_can_impersonate_members_of_staff(): void
     {
         $admin = User::factory()->admin()->create();
         $user = User::factory()->create();
@@ -24,7 +24,7 @@ class ImpersonationTest extends TestCase
     }
 
     /** @test */
-    public function regular_users_cant_impersonate_members_of_staff()
+    public function regular_users_cant_impersonate_members_of_staff(): void
     {
         $admin = User::factory()->admin()->create();
         $user = User::factory()->create();
@@ -38,7 +38,7 @@ class ImpersonationTest extends TestCase
     }
 
     /** @test */
-    public function admin_users_can_stop_impersonateing_members_of_staff()
+    public function admin_users_can_stop_impersonateing_members_of_staff(): void
     {
         $admin = User::factory()->admin()->create();
         $user = User::factory()->create();
