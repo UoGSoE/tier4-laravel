@@ -2,9 +2,9 @@
 
 namespace App\Console\Commands;
 
+use App\Mail\StaffOverdueMeeting;
 use App\Models\User;
 use Illuminate\Console\Command;
-use App\Mail\StaffOverdueMeeting;
 use Illuminate\Support\Facades\Mail;
 
 class NotifyStaffOverdueMeetings extends Command
@@ -50,7 +50,7 @@ class NotifyStaffOverdueMeetings extends Command
                 $bccAddresses = $bccAddresses->merge($postgradProjectAdmins->pluck('email'));
             }
 
-            Mail::to($staffMember)->bcc($bccAddresses->unique())->later(now()->addSeconds(rand(10, 15*60)), new StaffOverdueMeeting($overdueStudents));
+            Mail::to($staffMember)->bcc($bccAddresses->unique())->later(now()->addSeconds(rand(10, 15 * 60)), new StaffOverdueMeeting($overdueStudents));
         });
 
         return Command::SUCCESS;

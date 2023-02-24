@@ -2,14 +2,13 @@
 
 namespace Tests\Feature;
 
-use Tests\TestCase;
-use App\Models\User;
 use App\Models\Student;
-use Illuminate\Http\UploadedFile;
-use Ohffs\SimpleSpout\ExcelSheet;
-use Illuminate\Foundation\Testing\WithFaker;
+use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Http;
+use Ohffs\SimpleSpout\ExcelSheet;
+use Tests\TestCase;
 
 class ImportTest extends TestCase
 {

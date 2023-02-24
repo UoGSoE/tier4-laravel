@@ -2,14 +2,13 @@
 
 namespace Tests\Feature;
 
-use Tests\TestCase;
-use App\Models\User;
-use App\Models\Student;
 use App\Mail\StaffOverdueMeeting;
+use App\Models\Student;
+use App\Models\User;
 use Carbon\Carbon;
-use Illuminate\Support\Facades\Mail;
-use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Support\Facades\Mail;
+use Tests\TestCase;
 
 class StaffNotificationTest extends TestCase
 {
@@ -65,7 +64,7 @@ class StaffNotificationTest extends TestCase
         $this->artisan('tier4:notify-staff-overdue-meetings');
 
         Mail::assertQueued(StaffOverdueMeeting::class, 1);
-        Mail::assertQueued(StaffOverdueMeeting::class, function ($mail) use ($staff, $student1, $student2) {
+        Mail::assertQueued(StaffOverdueMeeting::class, function ($mail) use ($staff, $student1) {
             return $mail->hasTo($staff->email) &&
                 $mail->overdueStudents->count() == 1 &&
                 $mail->overdueStudents->contains($student1);

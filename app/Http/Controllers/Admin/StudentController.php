@@ -2,15 +2,16 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Http\Controllers\Controller;
 use App\Models\Student;
 use Illuminate\Http\Request;
-use App\Http\Controllers\Controller;
 
 class StudentController extends Controller
 {
     public function show(Student $student)
     {
         $student->load(['notes' => fn ($query) => $query->orderByDesc('updated_at')]);
+
         return view('admin.student.show', [
             'student' => $student,
         ]);

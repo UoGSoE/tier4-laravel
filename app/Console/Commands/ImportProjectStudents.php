@@ -2,13 +2,13 @@
 
 namespace App\Console\Commands;
 
-use App\Models\User;
 use App\Models\Student;
-use Illuminate\Support\Str;
+use App\Models\User;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\MessageBag;
+use Illuminate\Support\Str;
 
 class ImportProjectStudents extends Command
 {
@@ -40,6 +40,7 @@ class ImportProjectStudents extends Command
 
         if ($response->failed()) {
             $this->error('Failed to import project students and supervisors from the project database API');
+
             return Command::FAILURE;
         }
 
@@ -57,7 +58,8 @@ class ImportProjectStudents extends Command
             ]);
 
             if ($validator->fails()) {
-                $errors->add("supervisor_{$index}", $validator->errors()->toJson()  . json_encode($supervisor));
+                $errors->add("supervisor_{$index}", $validator->errors()->toJson().json_encode($supervisor));
+
                 return;
             }
 
@@ -82,9 +84,10 @@ class ImportProjectStudents extends Command
             if ($validator->fails()) {
                 $errors->add(
                     "student_{$index}",
-                    $validator->errors()->toJson() .
+                    $validator->errors()->toJson().
                     json_encode($student)
                 );
+
                 return;
             }
 
@@ -107,7 +110,8 @@ class ImportProjectStudents extends Command
             $this->error('Failed to import some entries');
         }
 
-        $this->info('Complete: succefully processed ' . $studentRecordsProcessed . ' student records');
+        $this->info('Complete: succefully processed '.$studentRecordsProcessed.' student records');
+
         return Command::SUCCESS;
     }
 }

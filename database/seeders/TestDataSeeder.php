@@ -2,13 +2,11 @@
 
 namespace Database\Seeders;
 
-use App\Models\User;
 use App\Models\Meeting;
 use App\Models\Student;
 use App\Models\StudentNote;
+use App\Models\User;
 use Illuminate\Database\Seeder;
-use Database\Factories\MeetingFactory;
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 
 class TestDataSeeder extends Seeder
 {
@@ -32,7 +30,7 @@ class TestDataSeeder extends Seeder
         $supervisors->each(fn ($supervisor) => $supervisor->students->each(
             fn ($student) => Meeting::factory()->count(rand(1, 50))->create([
                 'student_id' => $student->id,
-                'supervisor_id' => $student->supervisor_id
+                'supervisor_id' => $student->supervisor_id,
             ])
         ));
         Student::inRandomOrder()->take(100)->get()->each(fn ($student) => StudentNote::factory(rand(1, 5))->create(['student_id' => $student->id, 'user_id' => $admin->id]));

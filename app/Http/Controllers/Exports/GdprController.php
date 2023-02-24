@@ -2,10 +2,9 @@
 
 namespace App\Http\Controllers\Exports;
 
-use App\Models\User;
-use App\Models\Student;
-use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Models\Student;
+use App\Models\User;
 
 class GdprController extends Controller
 {

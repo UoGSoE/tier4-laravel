@@ -2,13 +2,12 @@
 
 namespace Tests\Feature;
 
-use Tests\TestCase;
-use App\Models\User;
-use App\Models\Student;
 use App\Exports\PhdStudents;
-use Illuminate\Foundation\Testing\WithFaker;
+use App\Models\Student;
+use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Ohffs\SimpleSpout\ExcelSheet;
+use Tests\TestCase;
 
 class ExportTest extends TestCase
 {
@@ -21,7 +20,7 @@ class ExportTest extends TestCase
 
         $response = $this->actingAs($admin)->get(route('admin.export.phds'));
 
-        $response->assertDownload('tier4-phd-students-' . now()->format('d-m-Y') . '.xlsx');
+        $response->assertDownload('tier4-phd-students-'.now()->format('d-m-Y').'.xlsx');
     }
 
     /** @test */

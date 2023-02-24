@@ -4,11 +4,10 @@ namespace Tests\Feature;
 
 use App\Models\Student;
 use App\Models\StudentNote;
-use Tests\TestCase;
 use App\Models\User;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Support\Facades\DB;
+use Tests\TestCase;
 
 class ImportOldTier4DataTest extends TestCase
 {
@@ -121,7 +120,7 @@ class ImportOldTier4DataTest extends TestCase
             'database.connections.oldtier4' => [
                 'driver' => 'sqlite',
                 'url' => env('DATABASE_URL'),
-                'database' => base_path() . '/tests/fixtures/oldtier4.sqlite',
+                'database' => base_path().'/tests/fixtures/oldtier4.sqlite',
                 'prefix' => '',
                 'foreign_key_constraints' => env('DB_FOREIGN_KEYS', true),
             ],

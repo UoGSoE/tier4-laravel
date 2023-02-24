@@ -2,12 +2,11 @@
 
 namespace Tests\Feature;
 
-use Tests\TestCase;
-use App\Models\User;
 use App\Models\Meeting;
 use App\Models\Student;
-use Illuminate\Foundation\Testing\WithFaker;
+use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Tests\TestCase;
 
 class ApiTest extends TestCase
 {
@@ -16,22 +15,22 @@ class ApiTest extends TestCase
     /** @test */
     public function we_need_a_valid_api_key_to_make_requests()
     {
-        $response = $this->getJson("/api/students", [
-            'Authorization' => "Bearer invalid-key",
+        $response = $this->getJson('/api/students', [
+            'Authorization' => 'Bearer invalid-key',
         ]);
 
         $response->assertUnauthorized();
 
         config(['tier4.api_key' => 'valid-key']);
 
-        $response = $this->getJson("/api/students", [
-            'Authorization' => "Bearer invalid-key",
+        $response = $this->getJson('/api/students', [
+            'Authorization' => 'Bearer invalid-key',
         ]);
 
         $response->assertUnauthorized();
 
-        $response = $this->getJson("/api/students", [
-            'Authorization' => "Bearer valid-key",
+        $response = $this->getJson('/api/students', [
+            'Authorization' => 'Bearer valid-key',
         ]);
 
         $response->assertOk();
@@ -99,7 +98,7 @@ class ApiTest extends TestCase
         $overdueMeeting2 = Meeting::factory()->create(['meeting_at' => now()->subDays(40), 'student_id' => $student4->id, 'supervisor_id' => $student4->supervisor_id]);
         $overdueMeetingWithInactiveStudent = Meeting::factory()->create(['meeting_at' => now()->subDays(40), 'student_id' => $inactiveStudent->id, 'supervisor_id' => $inactiveStudent->supervisor_id]);
 
-        $response = $this->getJson('/api/overduemeetings?type=' . Student::TYPE_PHD, [
+        $response = $this->getJson('/api/overduemeetings?type='.Student::TYPE_PHD, [
             'Authorization' => 'Bearer valid-key',
         ]);
 
@@ -134,7 +133,7 @@ class ApiTest extends TestCase
         $overdueMeeting2 = Meeting::factory()->create(['meeting_at' => now()->subDays(40), 'student_id' => $student4->id, 'supervisor_id' => $student4->supervisor_id]);
         $overdueMeetingWithInactiveStudent = Meeting::factory()->create(['meeting_at' => now()->subDays(40), 'student_id' => $inactiveStudent->id, 'supervisor_id' => $inactiveStudent->supervisor_id]);
 
-        $response = $this->getJson('/api/overduemeetings?type=' . Student::TYPE_POSTGRAD_PROJECT, [
+        $response = $this->getJson('/api/overduemeetings?type='.Student::TYPE_POSTGRAD_PROJECT, [
             'Authorization' => 'Bearer valid-key',
         ]);
 
@@ -220,7 +219,7 @@ class ApiTest extends TestCase
         $meeting3 = Meeting::factory()->create(['meeting_at' => now()->subDays(20), 'student_id' => $postgradProjectStudent->id, 'supervisor_id' => $postgradProjectStudent->supervisor_id]);
         $inactivePhdMeeting = Meeting::factory()->create(['meeting_at' => now()->subDays(40), 'student_id' => $invactivePhdStudent->id, 'supervisor_id' => $invactivePhdStudent->supervisor_id]);
 
-        $response = $this->getJson('/api/students/?type=' . Student::TYPE_PHD, [
+        $response = $this->getJson('/api/students/?type='.Student::TYPE_PHD, [
             'Authorization' => 'Bearer valid-key',
         ]);
 
@@ -263,7 +262,7 @@ class ApiTest extends TestCase
         $meeting3 = Meeting::factory()->create(['meeting_at' => now()->subDays(20), 'student_id' => $postgradProjectStudent->id, 'supervisor_id' => $postgradProjectStudent->supervisor_id]);
         $inactivePhdMeeting = Meeting::factory()->create(['meeting_at' => now()->subDays(40), 'student_id' => $invactivePhdStudent->id, 'supervisor_id' => $invactivePhdStudent->supervisor_id]);
 
-        $response = $this->getJson('/api/students/?type=' . Student::TYPE_POSTGRAD_PROJECT, [
+        $response = $this->getJson('/api/students/?type='.Student::TYPE_POSTGRAD_PROJECT, [
             'Authorization' => 'Bearer valid-key',
         ]);
 
@@ -308,7 +307,7 @@ class ApiTest extends TestCase
             'supervisor_id' => $supervisor1->id,
         ]);
 
-        $response = $this->getJson('/api/supervisor/' . $supervisor1->username, [
+        $response = $this->getJson('/api/supervisor/'.$supervisor1->username, [
             'Authorization' => 'Bearer valid-key',
         ]);
 
@@ -337,7 +336,6 @@ class ApiTest extends TestCase
                 ],
             ],
         ]);
-
     }
 
     /** @test */

@@ -13,7 +13,7 @@ class MeetingController extends Controller
 
         $request->validate([
             'meetings' => 'required|array',
-            'meetings.*.student_id' => 'required|integer|in:' . $validStudentIds->join(','),
+            'meetings.*.student_id' => 'required|integer|in:'.$validStudentIds->join(','),
             'meetings.*.date' => 'nullable|date_format:d/m/Y',
         ]);
 

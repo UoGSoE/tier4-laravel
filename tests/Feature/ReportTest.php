@@ -2,14 +2,11 @@
 
 namespace Tests\Feature;
 
-use Tests\TestCase;
-use App\Models\User;
-use Livewire\Livewire;
 use App\Models\Student;
-use Illuminate\Http\UploadedFile;
-use Ohffs\SimpleSpout\ExcelSheet;
-use Illuminate\Foundation\Testing\WithFaker;
+use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Livewire\Livewire;
+use Tests\TestCase;
 
 class ReportTest extends TestCase
 {
@@ -136,8 +133,7 @@ class ReportTest extends TestCase
             ->assertSee($overdueStudent2->email)
             ->assertSee($notOverdueStudent->email)
             ->assertSee($overdueButInactiveStudent->email)
-            ->assertDontSee($phdStudent->email)
-            ;
+            ->assertDontSee($phdStudent->email);
     }
 
     /** @test */

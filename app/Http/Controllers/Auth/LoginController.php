@@ -2,13 +2,12 @@
 
 namespace App\Http\Controllers\Auth;
 
+use App\Http\Controllers\Controller;
 use App\Models\User;
-use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
-use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Str;
 use Illuminate\Validation\ValidationException;
 
 class LoginController extends Controller
@@ -45,7 +44,7 @@ class LoginController extends Controller
 
         $request->validate([
             'username' => 'required',
-            'password' => 'required'
+            'password' => 'required',
         ]);
 
         if ($this->looksLikeAMatric($request->username)) {
@@ -94,6 +93,7 @@ class LoginController extends Controller
         if ($user && $user->is_staff) {
             return false;
         }
+
         return preg_match('/^[0-9].+/', $username) === 1;
     }
 }

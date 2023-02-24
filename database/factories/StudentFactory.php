@@ -18,7 +18,7 @@ class StudentFactory extends Factory
     public function definition()
     {
         return [
-            'username' => $this->faker->randomNumber(7) . $this->faker->randomLetter(),
+            'username' => $this->faker->randomNumber(7).$this->faker->randomLetter(),
             'email' => $this->faker->unique()->safeEmail(),
             'forenames' => $this->faker->firstName(),
             'surname' => $this->faker->lastName(),

@@ -2,14 +2,14 @@
 
 namespace App\Http\Controllers\Imports;
 
-use App\Models\User;
-use App\Models\Student;
-use Illuminate\Support\Str;
-use Illuminate\Http\Request;
-use Ohffs\SimpleSpout\ExcelSheet;
-use Illuminate\Support\MessageBag;
 use App\Http\Controllers\Controller;
+use App\Models\Student;
+use App\Models\User;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\MessageBag;
+use Illuminate\Support\Str;
+use Ohffs\SimpleSpout\ExcelSheet;
 
 class PhdsController extends Controller
 {
@@ -61,7 +61,8 @@ class PhdsController extends Controller
                 if ($index === 0) {
                     continue;  // assume it's the header row
                 }
-                $errors->add('Row ' . $index + 1 . ':', implode(', ', $validator->errors()->all()));
+                $errors->add('Row '.$index + 1 .':', implode(', ', $validator->errors()->all()));
+
                 continue;
             }
 
@@ -80,7 +81,7 @@ class PhdsController extends Controller
             $student = Student::where('email', '=', $email)->first();
             if (! $student) {
                 $student = Student::make([
-                    'username' => strtolower($matric . $surname[0]),
+                    'username' => strtolower($matric.$surname[0]),
                     'surname' => $surname,
                     'forenames' => $forenames,
                     'email' => $email,
@@ -94,6 +95,7 @@ class PhdsController extends Controller
         if ($errors->count() > 0) {
             return redirect()->route('admin.import.phds.create')->withErrors($errors);
         }
+
         return redirect()->route('admin.import.phds.create')->with('success', 'PhD students imported successfully.');
     }
 }

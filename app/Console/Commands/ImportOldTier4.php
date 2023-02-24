@@ -2,14 +2,14 @@
 
 namespace App\Console\Commands;
 
-use App\Models\User;
 use App\Models\Meeting;
 use App\Models\Student;
+use App\Models\User;
 use Carbon\Carbon;
-use Illuminate\Support\Arr;
-use Illuminate\Support\Str;
 use Illuminate\Console\Command;
+use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Str;
 
 class ImportOldTier4 extends Command
 {
@@ -60,13 +60,13 @@ class ImportOldTier4 extends Command
             $newUser->is_active = (bool) $oldUser->current;
             $newUser->password = bcrypt(Str::random(64));
             if (in_array($newUser->username, ['sc280r', 'ts1083', 'js5835'])) {
-                $this->info('Mangling email as has two different GUID: ' . $oldUser->guid);
-                $newUser->email = '2.' . $newUser->email;
+                $this->info('Mangling email as has two different GUID: '.$oldUser->guid);
+                $newUser->email = '2.'.$newUser->email;
             }
             $newUser->save();
             $this->oldUserIdMap[$oldUser->id] = ['id' => $newUser->id, 'username' => $newUser->username];
         }
-        $this->info('Imported ' . count($oldUsers) . ' supervisors');
+        $this->info('Imported '.count($oldUsers).' supervisors');
 
         $oldUsers = DB::connection('oldtier4')->table('tier4_admins')->get();
         foreach ($oldUsers as $oldUser) {
@@ -85,7 +85,7 @@ class ImportOldTier4 extends Command
             $newUser->password = bcrypt(Str::random(64));
             $newUser->save();
         }
-        $this->info('Imported ' . count($oldUsers) . ' admins');
+        $this->info('Imported '.count($oldUsers).' admins');
     }
 
     protected function importOldStudents()
@@ -93,7 +93,7 @@ class ImportOldTier4 extends Command
         $oldStudents = DB::connection('oldtier4')->table('tier4_students')->get();
         foreach ($oldStudents as $oldStudent) {
             $shouldAddNotes = false;
-            $username = strtolower(trim($oldStudent->matric . $oldStudent->surname[0]));
+            $username = strtolower(trim($oldStudent->matric.$oldStudent->surname[0]));
             $newStudent = Student::where('username', '=', $username)->first();
             if (! $newStudent) {
                 $newStudent = new Student();
@@ -101,7 +101,7 @@ class ImportOldTier4 extends Command
             }
             if (! str_contains($oldStudent->email, '@')) {
                 $this->info("Mangling student {$oldStudent->matric} who has an email of {$oldStudent->email}");
-                $oldStudent->email = $oldStudent->matric . strtolower($oldStudent->surname[0]) . '@student.gla.ac.uk';
+                $oldStudent->email = $oldStudent->matric.strtolower($oldStudent->surname[0]).'@student.gla.ac.uk';
             }
             $newStudent->username = $username;
             $newStudent->surname = $oldStudent->surname;
@@ -117,7 +117,7 @@ class ImportOldTier4 extends Command
                 ]);
             }
         }
-        $this->info('Imported ' . count($oldStudents) . ' students');
+        $this->info('Imported '.count($oldStudents).' students');
     }
 
     protected function importOldMeetings()
@@ -142,6 +142,6 @@ class ImportOldTier4 extends Command
             $newMeeting->save();
             $previousMeetingDate = $meetingDate;
         }
-        $this->info('Imported ' . count($oldMeetings) . ' meetings');
+        $this->info('Imported '.count($oldMeetings).' meetings');
     }
 }

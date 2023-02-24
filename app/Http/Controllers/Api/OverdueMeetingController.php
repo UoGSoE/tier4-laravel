@@ -3,7 +3,6 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
-use App\Models\Meeting;
 use App\Models\Student;
 use Illuminate\Http\Request;
 

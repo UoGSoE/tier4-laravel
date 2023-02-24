@@ -11,7 +11,8 @@ class CachedOption
         if (app('env') === 'testing') {
             $ttlSeconds = 0;
         }
-        return \Illuminate\Support\Facades\Cache::remember('option:' . $key, $ttlSeconds, function () use ($key, $default) {
+
+        return \Illuminate\Support\Facades\Cache::remember('option:'.$key, $ttlSeconds, function () use ($key, $default) {
             return option($key, $default);
         });
     }

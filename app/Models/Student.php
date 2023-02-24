@@ -2,17 +2,17 @@
 
 namespace App\Models;
 
-use Carbon\Carbon;
-use App\Models\StudentNote;
 use App\Proxies\CachedOption;
-use Illuminate\Database\Eloquent\Model;
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
 
 class Student extends Model
 {
     use HasFactory;
 
     public const TYPE_POSTGRAD_PROJECT = 'postgrad_project';
+
     public const TYPE_PHD = 'phd';
 
     protected $fillable = [
@@ -99,7 +99,7 @@ class Student extends Model
 
     public function getFullNameAttribute(): string
     {
-        return $this->forenames . ' ' . $this->surname;
+        return $this->forenames.' '.$this->surname;
     }
 
     public function lastMeetingWith(User $user)
@@ -139,7 +139,7 @@ class Student extends Model
         // as this should only be handling the summer recess, it should be fine
         return Carbon::createFromFormat(
             'Y-m-d',
-            now()->year . '-' . CachedOption::get('postgrad_project_start_month', 5) . '-' . CachedOption::get('postgrad_project_start_day', 1)
+            now()->year.'-'.CachedOption::get('postgrad_project_start_month', 5).'-'.CachedOption::get('postgrad_project_start_day', 1)
         );
     }
 
@@ -149,7 +149,7 @@ class Student extends Model
         // as this should only be handling the summer recess, it should be fine
         return Carbon::createFromFormat(
             'Y-m-d',
-            now()->year . '-' . CachedOption::get('postgrad_project_end_month', 5) . '-' . CachedOption::get('postgrad_project_end_day', 1)
+            now()->year.'-'.CachedOption::get('postgrad_project_end_month', 5).'-'.CachedOption::get('postgrad_project_end_day', 1)
         );
     }
 }

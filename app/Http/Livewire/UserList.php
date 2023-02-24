@@ -3,15 +3,19 @@
 namespace App\Http\Livewire;
 
 use App\Models\User;
-use Livewire\Component;
 use Illuminate\Support\Str;
+use Livewire\Component;
 
 class UserList extends Component
 {
     public $username = '';
+
     public $surname = '';
+
     public $forenames = '';
+
     public $email = '';
+
     public $error = null;
 
     public function render()
@@ -30,12 +34,14 @@ class UserList extends Component
         $existingUser = User::where('username', '=', $this->username)->first();
         if ($existingUser?->isAdmin()) {
             $this->error = 'User is already an admin';
+
             return;
         }
 
         $ldapUser = \Ldap::findUser($this->username);
         if (! $ldapUser) {
             $this->error = 'User not found';
+
             return;
         }
 
@@ -52,6 +58,7 @@ class UserList extends Component
             $existingUser->is_admin = true;
             $existingUser->save();
             $this->reset();
+
             return;
         }
 
