@@ -18,7 +18,7 @@ class SupervisorsReport extends Component
 
     public function getSuperVisors()
     {
-        return User::with(['students.latestMeeting'])
+        return User::with(['students.latestMeeting', 'students.latestNote'])
             ->when($this->filter, function ($query) {
                 $query->where('forenames', 'like', "%{$this->filter}%")
                     ->orWhere('surname', 'like', "%{$this->filter}%");

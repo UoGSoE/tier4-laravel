@@ -52,6 +52,11 @@ class Student extends Model
         return $this->hasMany(StudentNote::class);
     }
 
+    public function latestNote()
+    {
+        return $this->hasOne(StudentNote::class)->latestOfMany('updated_at');
+    }
+
     public function scopeOverdue($query, int $numberOfDays = 28)
     {
         return $query->whereRelation('latestMeeting', 'meeting_at', '<', now()->subDays($numberOfDays));

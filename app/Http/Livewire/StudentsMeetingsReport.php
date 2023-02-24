@@ -46,7 +46,7 @@ class StudentsMeetingsReport extends Component
             )
             ->when(! $this->includeInactive, fn ($query) => $query->active())
             ->when($this->onlyOverdue, fn ($query) => $query->overdue(option($optionName, 28)))
-            ->with(['latestMeeting', 'supervisor'])
+            ->with(['latestMeeting', 'supervisor', 'latestNote'])
             ->orderBy('surname')
             ->get();
     }

@@ -2,7 +2,7 @@
 @section('content')
 
 <div class="box">
-    <p class="is-hidden-mobile">
+    <p class="is-hidden-mobile is-size-5">
         This system generates evidence of attendance and confirms that postgraduate students are active in their research.
         You are required to accurately enter information regarding meetings you have with your PGR students.
         This information will be monitored for block entry information and occurrences will be passed to the School Management Board.
@@ -35,7 +35,9 @@
                         title="{{ $student->full_name }} ({{ $student->username }})"
                     >
                         <td class="is-hidden-mobile">{{ $student->username }}</td>
-                        <td>{{ $student->forenames }}</td>
+                        <td>
+                            {{ $student->forenames }}
+                        </td>
                         <td>{{ $student->surname }}</td>
                         <td>
                             <div

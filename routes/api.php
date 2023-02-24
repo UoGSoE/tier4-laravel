@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\Student;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -14,6 +15,8 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-    return $request->user();
-});
+// Note: all routes use the ApiKeyMiddleware - set in app/Http/Kernel.php
+Route::get('/students', [App\Http\Controllers\Api\StudentController::class, 'index']);
+Route::get('/overduemeetings', [App\Http\Controllers\Api\OverdueMeetingController::class, 'index']);
+Route::get('/supervisors', [App\Http\Controllers\Api\SupervisorController::class, 'index']);
+Route::get('/supervisor/{user:username}', [App\Http\Controllers\Api\SupervisorController::class, 'show']);
