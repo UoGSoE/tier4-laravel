@@ -95,11 +95,11 @@ class OptionsTest extends TestCase
 
         $response->assertRedirect(route('admin.options.edit'));
         $response->assertSessionHasErrors([
-            'postgrad_project_start_day' => 'The postgrad project start day must be an integer.',
-            'postgrad_project_start_month' => 'The postgrad project start month must not be greater than 12.',
-            'postgrad_project_end_day' => 'The postgrad project end day must be at least 1.',
-            'postgrad_project_end_month' => 'The postgrad project end month must be an integer.',
-            'phd_meeting_reminder_days' => 'The phd meeting reminder days must be at least 1.',
+            'postgrad_project_start_day' => 'The postgrad project start day field must be an integer.',
+            'postgrad_project_start_month' => 'The postgrad project start month field must not be greater than 12.',
+            'postgrad_project_end_day' => 'The postgrad project end day field must be at least 1.',
+            'postgrad_project_end_month' => 'The postgrad project end month field must be an integer.',
+            'phd_meeting_reminder_days' => 'The phd meeting reminder days field must be at least 1.',
         ]);
         $this->assertEquals(1, option('postgrad_project_start_day'));
         $this->assertEquals(5, option('postgrad_project_start_month'));

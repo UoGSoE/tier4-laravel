@@ -20,6 +20,7 @@ class ExportTest extends TestCase
 
         $response = $this->actingAs($admin)->get(route('admin.export.phds'));
 
+        $response->assertOk();
         $response->assertDownload('tier4-phd-students-'.now()->format('d-m-Y').'.xlsx');
     }
 

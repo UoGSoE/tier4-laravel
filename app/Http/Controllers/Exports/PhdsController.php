@@ -5,10 +5,10 @@ namespace App\Http\Controllers\Exports;
 use App\Exports\PhdStudents;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Response;
-
+use Symfony\Component\HttpFoundation\BinaryFileResponse;
 class PhdsController extends Controller
 {
-    public function show(): Response
+    public function show(): BinaryFileResponse
     {
         $sheet = (new PhdStudents())->export();
 
