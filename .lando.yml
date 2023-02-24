@@ -2,7 +2,7 @@ name: tier4
 recipe: laravel
 config:
   webroot: public
-  php: '8.1'
+  php: '8.2'
   cache: redis
 excludes:
   - node_modules
