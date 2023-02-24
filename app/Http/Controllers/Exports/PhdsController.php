@@ -2,9 +2,9 @@
 
 namespace App\Http\Controllers\Exports;
 
-use Illuminate\Http\Response;
 use App\Exports\PhdStudents;
 use App\Http\Controllers\Controller;
+use Illuminate\Http\Response;
 
 class PhdsController extends Controller
 {

@@ -2,9 +2,9 @@
 
 namespace App\Http\Controllers\Reports;
 
-use Illuminate\View\View;
 use App\Http\Controllers\Controller;
 use App\Models\Student;
+use Illuminate\View\View;
 
 class StudentController extends Controller
 {
