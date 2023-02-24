@@ -64,10 +64,12 @@ return [
             'driver' => 'eloquent',
             'model' => App\Models\User::class,
         ],
+
         'ldapusers' => [
             'driver' => 'ldapeloquent',
             'model' => App\Models\User::class,
         ],
+
         // 'users' => [
         //     'driver' => 'database',
         //     'table' => 'users',
@@ -86,6 +88,10 @@ return [
     | The expire time is the number of minutes that each reset token will be
     | considered valid. This security feature keeps tokens short-lived so
     | they have less time to be guessed. You may change this as needed.
+    |
+    | The throttle setting is the number of seconds a user must wait before
+    | generating more password reset tokens. This prevents the user from
+    | quickly generating a very large amount of password reset tokens.
     |
     */
 
