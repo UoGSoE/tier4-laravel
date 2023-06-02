@@ -63,9 +63,9 @@ class BulkEditTest extends TestCase
     {
         $this->withoutExceptionHandling();
         $admin = User::factory()->admin()->create();
-        $phdStudent1 = Student::factory()->hasMeetings(1, ['meeting_at' => now()->subMonths(6)])->create(['type' => Student::TYPE_PHD, 'is_active' => true]);
+        $phdStudent1 = Student::factory()->hasMeetings(1, ['meeting_at' => now()->subMonths(5)])->create(['type' => Student::TYPE_PHD, 'is_active' => true]);
         $phdStudent2 = Student::factory()->hasMeetings(1, ['meeting_at' => now()->subMonths(7)])->create(['type' => Student::TYPE_PHD, 'is_active' => false]);
-        $phdStudent3 = Student::factory()->hasMeetings(1, ['meeting_at' => now()->subMonths(5)])->create(['type' => Student::TYPE_PHD, 'is_active' => true]);
+        $phdStudent3 = Student::factory()->hasMeetings(1, ['meeting_at' => now()->subMonths(4)])->create(['type' => Student::TYPE_PHD, 'is_active' => true]);
         $projectStudent1 = Student::factory()->hasMeetings(1, ['meeting_at' => now()])->create(['type' => Student::TYPE_POSTGRAD_PROJECT]);
         $projectStudent2 = Student::factory()->hasMeetings(1, ['meeting_at' => now()])->create(['type' => Student::TYPE_POSTGRAD_PROJECT]);
         $projectStudent3 = Student::factory()->hasMeetings(1, ['meeting_at' => now()])->create(['type' => Student::TYPE_POSTGRAD_PROJECT]);
