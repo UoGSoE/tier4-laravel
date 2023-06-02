@@ -95,22 +95,22 @@ class ImportOldTier4DataTest extends TestCase
         $this->assertDatabaseHas('meetings', [
             'student_id' => Student::where('username', '=', '1234567s')->first()->id,
             'supervisor_id' => User::where('username', '=', 'jsmith')->first()->id,
-            'meeting_at' => '2021-01-01 10:00:00',
+            'meeting_at' => '2021-01-01',
         ]);
         $this->assertDatabaseHas('meetings', [
             'student_id' => Student::where('username', '=', '1234567s')->first()->id,
             'supervisor_id' => User::where('username', '=', 'jsmith')->first()->id,
-            'meeting_at' => '2021-01-02 10:00:00',
+            'meeting_at' => '2021-01-02',
         ]);
         $this->assertDatabaseHas('meetings', [
             'student_id' => Student::where('username', '=', '2345678s')->first()->id,
             'supervisor_id' => User::where('username', '=', 'qsmith')->first()->id,
-            'meeting_at' => '2021-01-03 10:00:00',
+            'meeting_at' => '2021-01-03',
         ]);
         $this->assertDatabaseHas('meetings', [
             'student_id' => Student::where('username', '=', '3456789s')->first()->id,
             'supervisor_id' => User::where('username', '=', 'qsmith')->first()->id,
-            'meeting_at' => '2021-01-04 10:00:00',
+            'meeting_at' => '2021-01-04',
         ]);
     }
 
