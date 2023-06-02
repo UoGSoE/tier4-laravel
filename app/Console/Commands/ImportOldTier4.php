@@ -139,7 +139,6 @@ class ImportOldTier4 extends Command
             $newMeeting->student_id = $this->oldStudentIdMap[$oldMeeting->student_id]['id'];
             $newMeeting->supervisor_id = Arr::get($this->oldUserIdMap, "{$oldMeeting->supervisor_id}.id", null);
             $newMeeting->meeting_at = $meetingDate;
-            dump(Student::find($newMeeting->student_id), User::find($newMeeting->supervisor_id), $newMeeting);
             $newMeeting->save();
             $previousMeetingDate = $meetingDate;
         }
