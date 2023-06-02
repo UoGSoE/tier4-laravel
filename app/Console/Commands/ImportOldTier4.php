@@ -14,6 +14,7 @@ use Illuminate\Support\Str;
 class ImportOldTier4 extends Command
 {
     protected $oldUserIdMap = [];
+    protected $oldStudentIdMap = [];
 
     /**
      * The name and signature of the console command.
@@ -108,6 +109,7 @@ class ImportOldTier4 extends Command
             $newStudent->supervisor_id = Arr::get($this->oldUserIdMap, "{$oldStudent->supervisor_id}.id", null);
             $newStudent->is_active = (bool) $oldStudent->current;
             $newStudent->save();
+            $this->oldStudentIdMap[$oldStudent->id] = ['id' => $newStudent->id, 'username' => $newStudent->username];
             if ($oldStudent->notes && $shouldAddNotes) {
                 $newStudent->notes()->create([
                     'body' => $oldStudent->notes,
@@ -134,7 +136,7 @@ class ImportOldTier4 extends Command
                 $meetingDate = $previousMeetingDate;
             }
             $newMeeting = new Meeting();
-            $newMeeting->student_id = $oldMeeting->student_id;
+            $newMeeting->student_id = $this->oldStudentIdMap[$oldMeeting->student_id]['id'];
             $newMeeting->supervisor_id = Arr::get($this->oldUserIdMap, "{$oldMeeting->supervisor_id}.id", null);
             $newMeeting->meeting_at = $meetingDate;
             dump(Student::find($newMeeting->student_id), User::find($newMeeting->supervisor_id), $newMeeting);
