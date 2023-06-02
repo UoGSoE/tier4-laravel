@@ -21,7 +21,7 @@
 stages:
   - build-qa
   - test
-  - build-prod
+  # the deploy steps depend on the build steps // - build-prod
   - deploy
 
 variables:
@@ -73,7 +73,7 @@ php-security-scan:
   stage: test
   image: $QA_IMAGE_NAME
   script:
-    - if [[ -f /root/.composer/vendor/bin/security-checker ]]; then php /root/.composer/vendor/bin/security-checker security:check ./composer.lock ; fi
+    - composer audit
 
 dotenv-example-missing-keys-check:
   stage: test
@@ -124,7 +124,7 @@ deploy_to_qa:
   extends:
     - .deployment
   when: manual
-  environment: 
+  environment:
     name: qa
     url: http://${TRAEFIK_QA_HOSTNAME}
   needs:
@@ -147,7 +147,7 @@ deploy_to_prod:
   - master
   needs:
   - build-prod
-  environment: 
+  environment:
     name: prod
     url: https://${TRAEFIK_PROD_HOSTNAME}
   variables:
