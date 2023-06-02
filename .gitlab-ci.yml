@@ -21,7 +21,7 @@
 stages:
   - build-qa
   - test
-  # the deploy steps depend on the build steps // - build-prod
+  - build-prod
   - deploy
 
 variables:
