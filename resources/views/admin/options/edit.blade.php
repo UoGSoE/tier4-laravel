@@ -27,7 +27,7 @@
 
         <div class="columns">
             <div class="column">
-                <label class="label">Postgrad Project Start</label>
+                <label class="label">Postgrad Project Start (Month / Day)</label>
                 <div class="field is-grouped">
                     <div class="control">
                       <div class="select">
@@ -44,7 +44,7 @@
                 </div>
             </div>
             <div class="column">
-                <label class="label">Postgrad Project End</label>
+                <label class="label">Postgrad Project End (Month / Day)</label>
                 <div class="field is-grouped">
                     <div class="control">
                       <div class="select">

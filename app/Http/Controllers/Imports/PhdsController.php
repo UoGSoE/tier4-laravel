@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Imports;
 
+use App\Events\SomethingHappened;
 use App\Http\Controllers\Controller;
 use App\Models\Student;
 use App\Models\User;
@@ -93,6 +94,8 @@ class PhdsController extends Controller
             $student->supervisor_id = $supervisor->id;
             $student->save();
         }
+
+        SomethingHappened::dispatch("{$request->user()->full_name} ran a PhD students import");
 
         if ($errors->count() > 0) {
             return redirect()->route('admin.import.phds.create')->withErrors($errors);

@@ -33,12 +33,18 @@
                     <a class="navbar-item" href="{{ route('admin.import.phds.create') }}">
                         Import PhD Students
                     </a>
+                    <a class="navbar-item" href="{{ route('admin.import.project-students.create') }}">
+                        Import Project Students
+                    </a>
                     <hr class="navbar-divider">
                     <a class="navbar-item" href="{{ route('admin.options.edit') }}">
                         Options
                     </a>
                     <a class="navbar-item" href="{{ route('admin.admins.edit') }}">
                         Manage Admins
+                    </a>
+                    <a class="navbar-item" href="{{ route('admin.activity.index') }}">
+                        Activity Log
                     </a>
                 </div>
             </div>

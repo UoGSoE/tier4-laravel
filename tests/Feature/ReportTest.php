@@ -254,4 +254,34 @@ class ReportTest extends TestCase
             ->assertSee($student2->full_name)
             ->assertSee($student3->full_name);
     }
+
+    /** @test */
+    public function setting_the_filter_to_multiple_whitespaces_doesnt_trigger_filtering()
+    {
+        $admin = User::factory()->admin()->create();
+        $staff1 = User::factory()->create(['surname' => 'staff1']);
+        $staff2 = User::factory()->create(['surname' => 'staff2']);
+        $student1 = Student::factory()->create(['supervisor_id' => $staff1->id, 'surname' => 'student1']);
+        $student2 = Student::factory()->create(['supervisor_id' => $staff1->id, 'surname' => 'student2']);
+        $student3 = Student::factory()->create(['supervisor_id' => $staff2->id, 'surname' => 'student3']);
+        $staff1->meetings()->create(['student_id' => $student1->id, 'meeting_at' => now()->subDays(30)]);
+        $staff1->meetings()->create(['student_id' => $student1->id, 'meeting_at' => now()->subDays(90)]);
+        $staff1->meetings()->create(['student_id' => $student2->id, 'meeting_at' => now()->subDays(3)]);
+        $staff1->meetings()->create(['student_id' => $student2->id, 'meeting_at' => now()->subDays(75)]);
+        $staff2->meetings()->create(['student_id' => $student3->id, 'meeting_at' => now()->subDays(95)]);
+
+        Livewire::actingAs($admin)->test('supervisors-report')
+            ->assertSee($staff1->full_name)
+            ->assertSee($staff2->full_name)
+            ->assertSee($student1->full_name)
+            ->assertSee($student2->full_name)
+            ->assertSee($student3->full_name)
+            ->set('filter', '   ')
+            ->assertSee($staff1->full_name)
+            ->assertSee($staff2->full_name)
+            ->assertSee($student1->full_name)
+            ->assertSee($student2->full_name)
+            ->assertSee($student3->full_name);
+    }
+
 }

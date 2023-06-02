@@ -12,8 +12,8 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule): void
     {
-        // $schedule->command('inspire')->hourly();
-        $schedule->command('tier4:import-project-students')->dailyAt('04:00');
+        $schedule->command('tier4:notify-staff-overdue-meetings')->dailyAt('07:00');
+        $schedule->command('tier4:trim-activity-table')->sundays()->at('04:00');
     }
 
     /**

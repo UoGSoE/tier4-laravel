@@ -21,6 +21,7 @@ return new class() extends Migration
             $table->boolean('is_active')->default(true);
             $table->boolean('is_silenced')->default(false);
             $table->text('silenced_reason')->nullable();
+            $table->dateTime('last_alerted_about')->nullable();
             $table->unsignedBigInteger('supervisor_id')->nullable();
             $table->foreign('supervisor_id')->references('id')->on('users')->onDelete('set null');
             $table->timestamps();

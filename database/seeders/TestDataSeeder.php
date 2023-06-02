@@ -2,11 +2,13 @@
 
 namespace Database\Seeders;
 
+use App\Models\Activity;
 use App\Models\Meeting;
 use App\Models\Student;
 use App\Models\StudentNote;
 use App\Models\User;
 use Illuminate\Database\Seeder;
+use Illuminate\Notifications\Action;
 
 class TestDataSeeder extends Seeder
 {
@@ -31,6 +33,8 @@ class TestDataSeeder extends Seeder
                 'supervisor_id' => $student->supervisor_id,
             ])
         ));
+        Student::all()->each(fn ($student) => $student->update(['type' => rand(0, 1) ? Student::TYPE_POSTGRAD_PROJECT : Student::TYPE_PHD]));
         Student::inRandomOrder()->take(100)->get()->each(fn ($student) => StudentNote::factory(rand(1, 5))->create(['student_id' => $student->id, 'user_id' => $admin->id]));
+        Activity::factory()->count(1000)->create();
     }
 }

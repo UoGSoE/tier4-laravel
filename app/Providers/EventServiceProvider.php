@@ -2,6 +2,8 @@
 
 namespace App\Providers;
 
+use App\Events\SomethingHappened;
+use App\Listeners\RecordThatSomethingHappened;
 use App\Listeners\UpdateUserLastLoginDate;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Auth\Listeners\SendEmailVerificationNotification;
@@ -21,6 +23,9 @@ class EventServiceProvider extends ServiceProvider
         ],
         \Illuminate\Auth\Events\Login::class => [
             UpdateUserLastLoginDate::class,
+        ],
+        SomethingHappened::class => [
+            RecordThatSomethingHappened::class,
         ],
     ];
 

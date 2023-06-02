@@ -9,7 +9,8 @@ class HomeController extends Controller
     public function index(): View
     {
         return view('home', [
-            'students' => auth()->user()->students()->active()->with('latestMeeting')->orderBy('surname')->get(),
+            'phdStudents' => auth()->user()->phdStudents()->active()->with('latestMeeting')->orderBy('surname')->get(),
+            'projectStudents' => auth()->user()->postgradProjectStudents()->active()->with('latestMeeting')->orderBy('surname')->get(),
         ]);
     }
 }

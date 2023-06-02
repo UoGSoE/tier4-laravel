@@ -2,6 +2,7 @@
 
 namespace App\Console\Commands;
 
+use App\Events\SomethingHappened;
 use App\Mail\StaffOverdueMeeting;
 use App\Models\User;
 use Illuminate\Console\Command;
@@ -33,9 +34,10 @@ class NotifyStaffOverdueMeetings extends Command
         $staffList = User::active()->with('students.latestMeeting')->get();
 
         $staffList->each(function ($staffMember) use ($phdAdmins, $postgradProjectAdmins) {
-            $overdueStudents = $staffMember->students->filter(fn ($student) => $student->isActive() && $student->isntSilenced())->filter(
-                fn ($student) => $student->isOverdue()
-            );
+            $overdueStudents = $staffMember->students
+                ->filter(fn ($student) => $student->isActive() && $student->isntSilenced())
+                ->filter(fn ($student) => $student->isOverdue())
+                ->filter(fn ($student) => $student->hasntBeenAlertedAboutRecently());
 
             if ($overdueStudents->count() == 0) {
                 return;
@@ -49,6 +51,10 @@ class NotifyStaffOverdueMeetings extends Command
             }
 
             Mail::to($staffMember)->bcc($bccAddresses->unique())->later(now()->addSeconds(rand(10, 15 * 60)), new StaffOverdueMeeting($overdueStudents));
+
+            $overdueStudents->each(fn ($student) => $student->updateAlertedAbout());
+
+            event(new SomethingHappened("Email sent to {$staffMember->email} about overdue meetings for {$overdueStudents->pluck('email')->implode(', ')}"));
         });
 
         return Command::SUCCESS;

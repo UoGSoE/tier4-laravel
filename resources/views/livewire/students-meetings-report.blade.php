@@ -1,5 +1,16 @@
 <div>
-    <h3 class="title is-3">Overdue Students</h3>
+    <div class="level">
+        <div class="level-left">
+            <div class="level-item">
+                <h3 class="title is-3">Overdue Students</h3>
+            </div>
+        </div>
+        <div class="level-right">
+            <div class="level-item">
+                <a href="{{ route('admin.bulk-edit-students.edit', ['type' => $type]) }}" class="button">Bulk Edit Students</a>
+            </div>
+        </div>
+    </div>
     <div class="box">
         <div class="columns">
             <div class="column">

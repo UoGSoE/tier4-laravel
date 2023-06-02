@@ -42,12 +42,20 @@ Route::middleware('auth')->group(function () {
         Route::get('/reports/supervisor/{supervisor}', [\App\Http\Controllers\Reports\SupervisorController::class, 'show'])->name('reports.supervisor');
         Route::get('/reports/supervisors', [\App\Http\Controllers\Reports\SupervisorController::class, 'index'])->name('reports.supervisors');
 
+        Route::get('/bulk-edit-students/{type}', [\App\Http\Controllers\Admin\BulkEditStudentsController::class, 'edit'])->name('admin.bulk-edit-students.edit');
+        Route::post('/bulk-edit-students/{type}', [\App\Http\Controllers\Admin\BulkEditStudentsController::class, 'update'])->name('admin.bulk-edit-students.update');
+
         Route::post('/import/phds', [\App\Http\Controllers\Imports\PhdsController::class, 'store'])->name('admin.import.phds.store');
         Route::get('/import/phds', [\App\Http\Controllers\Imports\PhdsController::class, 'create'])->name('admin.import.phds.create');
+
+        Route::post('/import/projectstudents', [\App\Http\Controllers\Imports\ProjectStudentsController::class, 'store'])->name('admin.import.project-students.store');
+        Route::get('/import/projectstudents', [\App\Http\Controllers\Imports\ProjectStudentsController::class, 'create'])->name('admin.import.project-students.create');
 
         Route::get('/export/phds', [\App\Http\Controllers\Exports\PhdsController::class, 'show'])->name('admin.export.phds');
 
         Route::get('/gdpr/student/{student}', [\App\Http\Controllers\Exports\GdprController::class, 'student'])->name('admin.gdpr.student.export');
         Route::get('/gdpr/staff/{user}', [\App\Http\Controllers\Exports\GdprController::class, 'staff'])->name('admin.gdpr.staff.export');
+
+        Route::get('/activity', [\App\Http\Controllers\Admin\ActivityController::class, 'index'])->name('admin.activity.index');
     });
 });

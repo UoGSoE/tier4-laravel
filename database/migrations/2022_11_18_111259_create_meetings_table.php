@@ -16,7 +16,7 @@ return new class() extends Migration
             $table->foreignId('student_id')->constrained('students')->onDelete('cascade');
             $table->unsignedBigInteger('supervisor_id')->nullable();
             $table->foreign('supervisor_id')->references('id')->on('users')->onDelete('set null');
-            $table->dateTime('meeting_at');
+            $table->date('meeting_at');
             $table->timestamps();
         });
     }

@@ -25,11 +25,13 @@ class Student extends Model
         'is_active',
         'is_silenced',
         'silenced_reason',
+        'last_alerted_about',
     ];
 
     protected $casts = [
         'is_active' => 'boolean',
         'is_silenced' => 'boolean',
+        'last_alerted_about' => 'datetime',
     ];
 
     public function supervisor()
@@ -152,4 +154,19 @@ class Student extends Model
             now()->year.'-'.CachedOption::get('postgrad_project_end_month', 5).'-'.CachedOption::get('postgrad_project_end_day', 1)
         );
     }
+
+    public function hasntBeenAlertedAboutRecently(): bool
+    {
+        if (! $this->last_alerted_about) {
+            return true;
+        }
+
+        return now()->diffInDays($this->last_alerted_about) > config('tier4.days_between_renotifications', 7);
+    }
+
+    public function updateAlertedAbout(): void
+    {
+        $this->update(['last_alerted_about' => now()]);
+    }
+
 }

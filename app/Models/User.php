@@ -69,6 +69,16 @@ class User extends Authenticatable
         return $this->hasMany(Student::class, 'supervisor_id');
     }
 
+    public function phdStudents()
+    {
+        return $this->students()->where('type', '=', Student::TYPE_PHD);
+    }
+
+    public function postgradProjectStudents()
+    {
+        return $this->students()->where('type', '=', Student::TYPE_POSTGRAD_PROJECT);
+    }
+
     public function scopeActive($query)
     {
         return $query->where('is_active', '=', true);

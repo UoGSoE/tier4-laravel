@@ -2,6 +2,7 @@
 
 namespace Tests\Feature;
 
+use App\Console\Commands\NotifyStaffOverdueMeetings;
 use App\Mail\StaffOverdueMeeting;
 use App\Models\Student;
 use App\Models\User;
@@ -20,6 +21,12 @@ class StaffNotificationTest extends TestCase
 
         option(['phd_meeting_reminder_days' => 28]);
         option(['postgrad_project_meeting_reminder_days' => 28]);
+    }
+
+    /** @test */
+    public function the_command_to_notify_staff_is_registered_with_laravel()
+    {
+        $this->assertCommandIsScheduled(\App\Console\Commands\NotifyStaffOverdueMeetings::class);
     }
 
     /** @test */
@@ -69,6 +76,53 @@ class StaffNotificationTest extends TestCase
                 $mail->overdueStudents->count() == 1 &&
                 $mail->overdueStudents->contains($student1);
         });
+    }
+
+    /** @test */
+    public function staff_are_only_notified_about_students_once_a_week()
+    {
+        Mail::fake();
+        config(['tier4.days_between_renotifications' => 7]);
+        $staff = User::factory()->create();
+        $staff2 = User::factory()->create();
+        $student1 = Student::factory()->create(['supervisor_id' => $staff->id]);
+        $student2 = Student::factory()->create(['supervisor_id' => $staff->id]);
+        $student3 = Student::factory()->create(['supervisor_id' => $staff->id]);
+        $student4 = Student::factory()->create(['supervisor_id' => $staff->id]);
+        $student5 = Student::factory()->create(['supervisor_id' => $staff2->id]);
+        $staff->meetings()->create(['student_id' => $student1->id, 'meeting_at' => now()->subDays(10)]);
+        $staff->meetings()->create(['student_id' => $student2->id, 'meeting_at' => now()->subDays(30)]);
+        $staff->meetings()->create(['student_id' => $student3->id, 'meeting_at' => now()->subDays(50)]);
+        $staff->meetings()->create(['student_id' => $student4->id, 'meeting_at' => now()->subDays(20)]);
+        $staff2->meetings()->create(['student_id' => $student5->id, 'meeting_at' => now()->subDays(20)]);
+
+        $this->artisan('tier4:notify-staff-overdue-meetings');
+
+        Mail::assertQueued(StaffOverdueMeeting::class, 1);
+        Mail::assertQueued(StaffOverdueMeeting::class, function ($mail) use ($staff, $student2, $student3) {
+            return $mail->hasTo($staff->email) &&
+                $mail->overdueStudents->count() == 2 &&
+                $mail->overdueStudents->contains($student2) &&
+                $mail->overdueStudents->contains($student3);
+        });
+
+        Mail::fake();
+
+        $this->artisan('tier4:notify-staff-overdue-meetings');
+        Mail::assertNothingQueued();
+
+        $this->travel(8)->days();
+
+        $this->artisan('tier4:notify-staff-overdue-meetings');
+
+        Mail::assertQueued(StaffOverdueMeeting::class, 1);
+        Mail::assertQueued(StaffOverdueMeeting::class, function ($mail) use ($staff, $student2, $student3) {
+            return $mail->hasTo($staff->email) &&
+                $mail->overdueStudents->count() == 2 &&
+                $mail->overdueStudents->contains($student2) &&
+                $mail->overdueStudents->contains($student3);
+        });
+
     }
 
     /** @test */
@@ -165,6 +219,12 @@ class StaffNotificationTest extends TestCase
         option(['postgrad_project_start_month' => now()->addDays(10)->month]);
         option(['postgrad_project_end_day' => now()->addDays(20)->day]);
         option(['postgrad_project_end_month' => now()->addDays(20)->month]);
+        // pretend we've never sent an alert about any of these students just to force the notification to be sent if applicable
+        $student1->update(['last_alerted_about' => null]);
+        $student2->update(['last_alerted_about' => null]);
+        $student3->update(['last_alerted_about' => null]);
+        $student4->update(['last_alerted_about' => null]);
+        $student5->update(['last_alerted_about' => null]);
 
         $this->artisan('tier4:notify-staff-overdue-meetings');
 

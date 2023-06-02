@@ -50,4 +50,5 @@
             }, 7000000);
         });
     </script>
+    @stack('scripts')
 </html>

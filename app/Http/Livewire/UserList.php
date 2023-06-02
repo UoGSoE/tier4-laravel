@@ -2,6 +2,7 @@
 
 namespace App\Http\Livewire;
 
+use App\Events\SomethingHappened;
 use App\Models\User;
 use Illuminate\Support\Str;
 use Livewire\Component;
@@ -79,6 +80,8 @@ class UserList extends Component
             'password' => bcrypt(Str::random(64)),
         ]);
 
+        SomethingHappened::dispatch(auth()->user()->full_name . ' created a new admin user ' . $this->username);
+
         $this->reset();
     }
 
@@ -87,7 +90,11 @@ class UserList extends Component
         if (auth()->id() == $userId) {
             return;
         }
-        User::findOrFail($userId)->update(['is_admin' => false]);
+        $demotedUser = User::findOrFail($userId);
+        $demotedUser->update(['is_admin' => false]);
+
+        SomethingHappened::dispatch(auth()->user()->full_name . ' demoted a user ' . $demotedUser->username);
+
         $this->reset();
     }
 
@@ -97,5 +104,7 @@ class UserList extends Component
         $user->update([
             $emailType => ! $user->$emailType,
         ]);
+
+        SomethingHappened::dispatch(auth()->user()->full_name . ' toggled ' . $emailType . ' for ' . $user->username);
     }
 }
