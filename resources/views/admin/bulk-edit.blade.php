@@ -2,6 +2,7 @@
 @section('content')
 
 <h3 class="title is-3">Bulk Edit Active {{ $formattedType }} Students</h3>
+<p class="subtitle">(These are all the students who have had a meeting in the past six months)</p>
 
 <form action="" method="post">
     <table class="table is-fullwidth is-striped is-hoverable">
