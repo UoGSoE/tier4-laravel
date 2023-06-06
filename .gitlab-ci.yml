@@ -67,12 +67,15 @@ stray-die-and-dump-check:
   stage: test
   image: $QA_IMAGE_NAME
   script:
-    - egrep -r '[^a-zA-Z](dd\(|dump\()' app || exit 0
+    - set -e
+    - egrep -r '[^a-zA-Z](dd\(|dump\()' app
 
 php-security-scan:
   stage: test
   image: $QA_IMAGE_NAME
   script:
+    - pwd
+    - ls -al
     - composer audit
 
 dotenv-example-missing-keys-check:
