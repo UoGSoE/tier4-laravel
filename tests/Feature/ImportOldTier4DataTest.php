@@ -114,6 +114,49 @@ class ImportOldTier4DataTest extends TestCase
         ]);
     }
 
+    /** @test */
+    public function importing_the_same_data_twice_doesnt_duplicate_it()
+    {
+        $this->artisan('tier4:importoldtier4');
+        $this->artisan('tier4:importoldtier4');
+
+        $this->assertDatabaseCount('users', 4);
+        $this->assertDatabaseCount('students', 3);
+        $this->assertDatabaseCount('meetings', 4);
+        $this->assertDatabaseCount('student_notes', 1);
+    }
+
+    /** @test */
+    public function importing_old_data_when_there_is_existing_data_doesnt_create_duplicates()
+    {
+        $existingStudent = Student::factory()->create([
+            'username' => '1234567s',
+            'forenames' => 'Existing',
+            'surname' => 'Student',
+            'email' => 'existing@example.com',
+            'supervisor_id' => null,
+        ]);
+        $existingUser = User::factory()->create([
+            'username' => 'jsmith',
+            'surname' => 'Existing',
+            'forenames' => 'User',
+            'email' => 'existinguser@example.com',
+        ]);
+        $existingAdminUser = User::factory()->create([
+            'username' => 'ksmith',
+            'surname' => 'Existing',
+            'forenames' => 'Admin',
+        ]);
+
+        $this->artisan('tier4:importoldtier4');
+
+        $this->assertDatabaseCount('users', 4);
+        $this->assertDatabaseCount('students', 3);
+        $this->assertDatabaseCount('meetings', 4);
+        $this->assertDatabaseCount('student_notes', 1);
+    }
+
+
     protected function setUpFakeDatabase()
     {
         config([

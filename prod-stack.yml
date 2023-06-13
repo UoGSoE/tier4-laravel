@@ -54,7 +54,7 @@ services:
       - source: dotenv
         target: .env
     deploy:
-      replicas: 2
+      replicas: 1
       placement:
         constraints:
           - "node.labels.weaksauce==false"

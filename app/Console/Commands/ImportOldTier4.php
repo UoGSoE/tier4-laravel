@@ -135,6 +135,14 @@ class ImportOldTier4 extends Command
                 $this->info("Mangling meeting date {$oldMeeting->meeting_date} for student {$oldMeeting->student_id} to be {$previousMeetingDate}");
                 $meetingDate = $previousMeetingDate;
             }
+            $existingMeeting = Meeting::where('student_id', '=', $this->oldStudentIdMap[$oldMeeting->student_id]['id'])
+                ->where('supervisor_id', '=', Arr::get($this->oldUserIdMap, "{$oldMeeting->supervisor_id}.id", null))
+                ->where('meeting_at', '=', $meetingDate)
+                ->first();
+            if ($existingMeeting) {
+                $this->info("Skipping meeting for student {$oldMeeting->student_id} on {$meetingDate} as already exists");
+                continue;
+            }
             $newMeeting = new Meeting();
             $newMeeting->student_id = $this->oldStudentIdMap[$oldMeeting->student_id]['id'];
             $newMeeting->supervisor_id = Arr::get($this->oldUserIdMap, "{$oldMeeting->supervisor_id}.id", null);
