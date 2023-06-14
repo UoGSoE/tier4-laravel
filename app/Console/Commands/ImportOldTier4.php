@@ -137,7 +137,7 @@ class ImportOldTier4 extends Command
             }
             $existingMeeting = Meeting::where('student_id', '=', $this->oldStudentIdMap[$oldMeeting->student_id]['id'])
                 ->where('supervisor_id', '=', Arr::get($this->oldUserIdMap, "{$oldMeeting->supervisor_id}.id", null))
-                ->where('meeting_at', '=', $meetingDate)
+                ->where('meeting_at', '=', $meetingDate->format('Y-m-d'))
                 ->first();
             if ($existingMeeting) {
                 $this->info("Skipping meeting for student {$oldMeeting->student_id} on {$meetingDate} as already exists");
@@ -146,7 +146,7 @@ class ImportOldTier4 extends Command
             $newMeeting = new Meeting();
             $newMeeting->student_id = $this->oldStudentIdMap[$oldMeeting->student_id]['id'];
             $newMeeting->supervisor_id = Arr::get($this->oldUserIdMap, "{$oldMeeting->supervisor_id}.id", null);
-            $newMeeting->meeting_at = $meetingDate;
+            $newMeeting->meeting_at = $meetingDate->format('Y-m-d');
             $newMeeting->save();
             $previousMeetingDate = $meetingDate;
         }

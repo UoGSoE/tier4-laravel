@@ -4,19 +4,14 @@ namespace App\Http\Controllers\Exports;
 
 use App\Exports\PhdStudents;
 use App\Http\Controllers\Controller;
-use App\Jobs\ImportPhdStudentsJob;
-use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
-
 class PhdsController extends Controller
 {
-    public function show(Request $request): BinaryFileResponse
+    public function show(): BinaryFileResponse
     {
-        $rows = (new PhdStudents())->query()->get()->toArray();
+        $sheet = (new PhdStudents())->export();
 
-        ImportPhdStudentsJob::dispatch($rows, $request->user());
-
-        return response()->download(storage_path('app/tier4-phd-students.xlsx'));
+        return response()->download($sheet, 'tier4-phd-students-'.now()->format('d-m-Y').'.xlsx');
     }
 }

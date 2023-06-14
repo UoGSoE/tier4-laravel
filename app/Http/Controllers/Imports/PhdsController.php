@@ -1,48 +1,36 @@
 <?php
 
-namespace App\Jobs;
+namespace App\Http\Controllers\Imports;
 
+use App\Events\SomethingHappened;
+use App\Http\Controllers\Controller;
 use App\Models\Student;
 use App\Models\User;
-use Illuminate\Bus\Queueable;
-use Illuminate\Contracts\Queue\ShouldQueue;
-use Illuminate\Foundation\Bus\Dispatchable;
-use Illuminate\Queue\InteractsWithQueue;
-use Illuminate\Queue\SerializesModels;
+use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\MessageBag;
 use Illuminate\Support\Str;
+use Illuminate\View\View;
 use Ohffs\SimpleSpout\ExcelSheet;
 
-class ImportPhdStudentsJob implements ShouldQueue
+class PhdsController extends Controller
 {
-    use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
-
-    protected $rows;
-    protected $user;
-
-    /**
-     * Create a new job instance.
-     *
-     * @param array $rows
-     * @param User $user
-     */
-    public function __construct(array $rows, User $user)
+    public function create(): View
     {
-        $this->rows = $rows;
-        $this->user = $user;
+        return view('admin.import.phd');
     }
 
-    /**
-     * Execute the job.
-     *
-     * @return void
-     */
-    public function handle()
+    public function store(Request $request): RedirectResponse
     {
-        $errors = new MessageBag();
+        $request->validate([
+            'sheet' => 'required|file',
+        ]);
 
-        foreach ($this->rows as $index => $row) {
+        $errors = new MessageBag();
+        $rows = (new ExcelSheet())->import($request->file('sheet'));
+
+        foreach ($rows as $index => $row) {
             $matric = $row[0] ?? '';
             $surname = $row[1] ?? '';
             $forenames = $row[2] ?? '';
@@ -107,10 +95,12 @@ class ImportPhdStudentsJob implements ShouldQueue
             $student->save();
         }
 
-        SomethingHappened::dispatch("{$this->user->full_name} ran a PhD students import");
+        SomethingHappened::dispatch("{$request->user()->full_name} ran a PhD students import");
 
         if ($errors->count() > 0) {
-            // TODO: send email to admin with error details
+            return redirect()->route('admin.import.phds.create')->withErrors($errors);
         }
+
+        return redirect()->route('admin.import.phds.create')->with('success', 'PhD students imported successfully.');
     }
 }

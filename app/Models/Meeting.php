@@ -16,7 +16,7 @@ class Meeting extends Model
     ];
 
     protected $casts = [
-        'meeting_at' => 'date',
+        'meeting_at' => 'date:Y-m-d',
     ];
 
     public function supervisor()
