@@ -15,6 +15,9 @@ class Student extends Model
 
     public const TYPE_PHD = 'phd';
 
+    public const SUB_TYPE_MSC = 'msc';
+    public const SUB_TYPE_BMENG = 'bmeng';
+
     protected $fillable = [
         'username',
         'email',
@@ -77,6 +80,16 @@ class Student extends Model
     public function scopeActive($query)
     {
         return $query->where('is_active', '=', true);
+    }
+
+    public function isMsc(): bool
+    {
+        return $this->sub_type === self::SUB_TYPE_MSC;
+    }
+
+    public function isBMeng(): bool
+    {
+        return $this->sub_type === self::SUB_TYPE_BMENG;
     }
 
     public function isActive(): bool

@@ -4,6 +4,7 @@ namespace App\Http\Livewire;
 
 use App\Models\Student;
 use Livewire\Component;
+use Ohffs\SimpleSpout\ExcelSheet;
 
 class StudentsMeetingsReport extends Component
 {
@@ -14,6 +15,9 @@ class StudentsMeetingsReport extends Component
     public $includeInactive = false;
 
     public $onlyOverdue = true;
+
+    public $sortField = 'surname';
+    public $sortDirection = 'asc';
 
     protected $queryString = ['type', 'filter', 'includeInactive' => ['except' => false], 'onlyOverdue' => ['except' => true]];
 
@@ -35,7 +39,7 @@ class StudentsMeetingsReport extends Component
     {
         $optionName = $this->type === Student::TYPE_PHD ? 'phd_meeting_reminder_days' : 'postgrad_project_meeting_reminder_days';
 
-        return Student::where('type', '=', $this->type)
+        $students = Student::where('type', '=', $this->type)
             ->when(
                 strlen(trim($this->filter)) > 2,
                 fn ($query) => $query->where(
@@ -47,7 +51,48 @@ class StudentsMeetingsReport extends Component
             ->when(! $this->includeInactive, fn ($query) => $query->active())
             ->when($this->onlyOverdue, fn ($query) => $query->overdue(option($optionName, 28)))
             ->with(['latestMeeting', 'supervisor', 'latestNote'])
-            ->orderBy('surname')
+            ->when(in_array($this->sortField, ['surname', 'forenames', 'username']), fn ($query) => $query->orderBy($this->sortField, $this->sortDirection))
             ->get();
+
+        if ($this->sortField === 'latestMeeting') {
+            return $this->sortDirection === 'asc' ? $students->sortBy(fn ($student) => $student->latestMeeting?->meeting_at) : $students->sortByDesc(fn ($student) => $student->latestMeeting?->meeting_at);
+        }
+        if ($this->sortField === 'supervisorName') {
+            return $this->sortDirection === 'asc' ? $students->sortBy(fn ($student) => $student->supervisor?->surname) : $students->sortByDesc(fn ($student) => $student->supervisor?->surname);
+        }
+
+        return $students;
     }
+
+    public function sortBy($field)
+    {
+        if ($this->sortField === $field) {
+            $this->sortDirection = $this->sortDirection === 'asc' ? 'desc' : 'asc';
+        } else {
+            $this->sortField = $field;
+            $this->sortDirection = 'asc';
+        }
+    }
+
+    public function exportExcel()
+    {
+        $filename = "students-meetings-report-" . now()->format('Y-m-d') . '.xlsx';
+
+        $rows = [];
+        $rows[] = ['Matric', 'Surname', 'Forenames', 'Supervisor', 'Last Meeting'];
+        foreach ($this->getStudents() as $student) {
+            $rows[] = [
+                $student->username,
+                $student->surname,
+                $student->forenames,
+                $student->supervisor?->fullName,
+                $student->latestMeeting?->meeting_at->format('d/m/Y'),
+            ];
+        };
+
+        $sheet = (new ExcelSheet())->generate($rows);
+
+        return response()->download($sheet, $filename)->deleteFileAfterSend(true);
+    }
+
 }

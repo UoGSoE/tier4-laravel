@@ -18,6 +18,7 @@ return new class() extends Migration
             $table->string('forenames');
             $table->string('surname');
             $table->string('type')->nullable();
+            $table->string('sub_type')->nullable();
             $table->boolean('is_active')->default(true);
             $table->boolean('is_silenced')->default(false);
             $table->text('silenced_reason')->nullable();

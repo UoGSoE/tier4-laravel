@@ -26,7 +26,10 @@ class TestDataSeeder extends Seeder
             'password' => bcrypt('secret'),
         ]);
 
-        $supervisors = User::factory()->count(50)->has(Student::factory()->count(rand(1, 15)))->create();
+        $supervisors = User::factory()->count(50)
+            ->has(Student::factory()->count(rand(1, 10)))
+            ->has(Student::factory()->postgradProject()->count(rand(1, 10)))
+            ->create();
         $supervisors->each(fn ($supervisor) => $supervisor->students->each(
             fn ($student) => Meeting::factory()->count(rand(1, 50))->create([
                 'student_id' => $student->id,

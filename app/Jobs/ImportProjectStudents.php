@@ -44,6 +44,7 @@ class ImportProjectStudents implements ShouldQueue
                     'forenames' => $rowContents[2],
                     'email' => $rowContents[21],
                     'supervisor_email' => $rowContents[16],
+                    'sub_type' => $rowContents[5],
                 ],
                 [
                     'matric' => 'required|integer',
@@ -51,6 +52,7 @@ class ImportProjectStudents implements ShouldQueue
                     'forenames' => 'required|string',
                     'email' => 'required|email',
                     'supervisor_email' => 'required|email',
+                    'sub_type' => 'required|string',
                 ]
             );
 
@@ -86,12 +88,18 @@ class ImportProjectStudents implements ShouldQueue
 
             $email = strtolower(trim($rowContents[21]));
             $student = Student::where('email', '=', $email)->first();
+            $subType = Student::SUB_TYPE_BMENG;
+            if (preg_match('/science/i', $rowContents[5])) {
+                $subType = Student::SUB_TYPE_MSC;
+            }
             if (! $student) {
                 $student = new Student();
                 $student->email = $email;
                 $student->username = $rowContents[0] . strtolower($rowContents[1][0]);
                 $student->forenames = $rowContents[2];
                 $student->surname = $rowContents[1];
+                $student->type = Student::TYPE_POSTGRAD_PROJECT;
+                $student->sub_type = $subType;
                 $student->save();
             }
             $student->supervisor_id = $supervisor->id;

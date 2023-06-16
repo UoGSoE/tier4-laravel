@@ -164,6 +164,8 @@ class ImportTest extends TestCase
             'forenames' => $row[2],
             'email' => strtolower($row[21]),
             'supervisor_id' => User::where('email', '=', strtolower(trim($row[16])))->first()->id,
+            'type' => Student::TYPE_POSTGRAD_PROJECT,
+            'sub_type' => str_contains($row[5], 'Science') ? Student::SUB_TYPE_MSC : Student::SUB_TYPE_BMENG,
         ]));
 
         Mail::assertQueued(ImportProjectStudentsComplete::class, function ($mail) {
@@ -233,7 +235,7 @@ class ImportTest extends TestCase
             ["2510913","McVitie","Jimmy","04","2200","Bachelor of Engineering","H641B-2200","BEng (Hons) EEE Micro 3+1...","Enrollment","Full-Time","International",120,"Y","Y","Y","Penny Lane","penny.lane@example.com","UG Adv Stu","","","","4234567B@student.example.com","whatever@example.com","Student Route","Valid to",12345,"blah","USD"],
             ["2515040","Brown","Charlie","04","2200","Bachelor of Engineering","J750-2200","Biomedical Engineering,BEng","Enrollment","Full-Time","International",120,"Y","Y","Y","Mario Cart","mario.cart@example.com","UG Adv Stu","","","","5234567B@student.example.com","whatever@example.com","Tier 4 (General)","Valid to",12345,"blah","USD"],
             ["2529228","Biden","Jill","04","2200","Bachelor of Engineering","J750-2200","Biomedical Engineering,BEng","Enrollment","Full-Time","International",120,"Y","Y","Y","Penny Lane","penny.lane@example.com","UG Adv Stu","","","","6234567B@student.example.com","whatever@example.com","Tier 4 (General)","Valid to",12345,"blah","USD"],
-            ["2488902","Truss","Liz","04","2200","Bachelor of Engineering","J750-2200","Biomedical Engineering,BEng","Enrollment","Full-Time","International",120,"Y","Y","Y","Julia Smith","julia.smith@example.com","UG Adv Stu","","","","7234567B@student.example.com","whatever@example.com","Tier 4 (ATAS)","Valid to",12345,"blah","ASG"],
+            ["2488902","Truss","Liz","04","2200","Master of Science","J750-2200","Biomedical Engineering,BEng","Enrollment","Full-Time","International",120,"Y","Y","Y","Julia Smith","julia.smith@example.com","UG Adv Stu","","","","7234567B@student.example.com","whatever@example.com","Tier 4 (ATAS)","Valid to",12345,"blah","ASG"],
         ];
     }
 

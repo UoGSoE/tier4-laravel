@@ -7,6 +7,9 @@
         </div>
         <div class="level-right">
             <div class="level-item">
+                <button class="button" wire:click.prevent="exportExcel">Export Excel</button>
+            </div>
+            <div class="level-item">
                 <a href="{{ route('admin.bulk-edit-students.edit', ['type' => $type]) }}" class="button">Bulk Edit Students</a>
             </div>
         </div>
@@ -60,11 +63,11 @@
     <table class="table is-fullwidth is-striped is-hoverable">
         <thead>
             <tr>
-                <th>Surname</th>
-                <th>Forenames</th>
-                <th>Email</th>
-                <th>Supervisor</th>
-                <th>Last Meeting</th>
+                <th @class(["is-clickable", 'has-text-link' => $sortField == 'surname']) wire:click.prevent="sortBy('surname')">Surname</th>
+                <th @class(["is-clickable", 'has-text-link' => $sortField == 'forenames']) wire:click.prevent="sortBy('forenames')">Forenames</th>
+                <th @class(["is-clickable", 'has-text-link' => $sortField == 'email']) wire:click.prevent="sortBy('email')">Email</th>
+                <th @class(["is-clickable", 'has-text-link' => $sortField == 'supervisorName']) wire:click.prevent="sortBy('supervisorName')">Supervisor</th>
+                <th @class(["is-clickable", 'has-text-link' => $sortField == 'latestMeeting']) wire:click.prevent="sortBy('latestMeeting')">Last Meeting</th>
             </tr>
         </thead>
         <tbody>

@@ -34,6 +34,7 @@ class StudentFactory extends Factory
         return $this->state(function (array $attributes) {
             return [
                 'type' => \App\Models\Student::TYPE_POSTGRAD_PROJECT,
+                'sub_type' => $this->faker->randomElement([\App\Models\Student::SUB_TYPE_MSC, \App\Models\Student::SUB_TYPE_BMENG]),
             ];
         });
     }

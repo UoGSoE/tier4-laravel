@@ -137,6 +137,93 @@ class ReportTest extends TestCase
     }
 
     /** @test */
+    public function admins_can_export_the_current_list_of_students_as_an_excel_file()
+    {
+        $admin = User::factory()->admin()->create();
+        $staff1 = User::factory()->create(['surname' => 'zzzzzzzzz']);
+        $staff2 = User::factory()->create(['surname' => 'aaaaaaaaa']);
+        $overdueStudent1 = Student::factory()->postgradProject()->create(['supervisor_id' => $staff1->id, 'surname' => 'qqqqqqq']);
+        $overdueStudent2 = Student::factory()->postgradProject()->create(['supervisor_id' => $staff2->id, 'surname' => 'wwwwwwww']);
+        $notOverdueStudent = Student::factory()->postgradProject()->create(['supervisor_id' => $staff1->id, 'surname' => 'eeeeeeee']);
+        $overdueButInactiveStudent = Student::factory()->postgradProject()->inactive()->create(['supervisor_id' => $staff1->id, 'surname' => 'rrrrrrrr']);
+        $phdStudent = Student::factory()->create(['supervisor_id' => $staff1->id]);
+        $staff1->meetings()->create(['student_id' => $overdueStudent1->id, 'meeting_at' => now()->subDays(30)]);
+        $staff2->meetings()->create(['student_id' => $overdueStudent2->id, 'meeting_at' => now()->subDays(30)]);
+        $staff1->meetings()->create(['student_id' => $notOverdueStudent->id, 'meeting_at' => now()->subDays(3)]);
+        $staff1->meetings()->create(['student_id' => $overdueButInactiveStudent->id, 'meeting_at' => now()->subDays(30)]);
+        $staff1->meetings()->create(['student_id' => $phdStudent->id, 'meeting_at' => now()->subDays(30)]);
+
+        Livewire::actingAs($admin)->test('students-meetings-report', ['type' => Student::TYPE_POSTGRAD_PROJECT])
+            ->set('filter', 'qqqqqqq')
+            ->call('exportExcel')
+            ->assertFileDownloaded('students-meetings-report-' . now()->format('Y-m-d') . '.xlsx');
+    }
+
+    /** @test */
+    public function admins_can_change_the_column_and_direction_that_is_used_to_sort_the_list_of_students()
+    {
+        $admin = User::factory()->admin()->create();
+        $staff1 = User::factory()->create(['surname' => 'zzzzzzzzz']);
+        $staff2 = User::factory()->create(['surname' => 'aaaaaaaaa']);
+        $overdueStudent1 = Student::factory()->postgradProject()->create(['supervisor_id' => $staff1->id, 'surname' => 'qqqqqqq', 'forenames' => 'zzzzzzzzz']);
+        $overdueStudent2 = Student::factory()->postgradProject()->create(['supervisor_id' => $staff2->id, 'surname' => 'wwwwwwww', 'forenames' => 'aaaaaaaaa']);
+        $notOverdueStudent = Student::factory()->postgradProject()->create(['supervisor_id' => $staff1->id, 'surname' => 'eeeeeeee']);
+        $overdueButInactiveStudent = Student::factory()->postgradProject()->inactive()->create(['supervisor_id' => $staff1->id, 'surname' => 'rrrrrrrr']);
+        $phdStudent = Student::factory()->create(['supervisor_id' => $staff1->id]);
+        $staff1->meetings()->create(['student_id' => $overdueStudent1->id, 'meeting_at' => now()->subDays(30)]);
+        $staff2->meetings()->create(['student_id' => $overdueStudent2->id, 'meeting_at' => now()->subDays(30)]);
+        $staff1->meetings()->create(['student_id' => $notOverdueStudent->id, 'meeting_at' => now()->subDays(3)]);
+        $staff1->meetings()->create(['student_id' => $overdueButInactiveStudent->id, 'meeting_at' => now()->subDays(30)]);
+        $staff1->meetings()->create(['student_id' => $phdStudent->id, 'meeting_at' => now()->subDays(30)]);
+
+        Livewire::actingAs($admin)->test('students-meetings-report', ['type' => Student::TYPE_POSTGRAD_PROJECT])
+            ->assertSet('sortField', 'surname')
+            ->assertSet('sortDirection', 'asc')
+            ->assertSeeInOrder([
+                $overdueStudent1->email,
+                $overdueStudent2->email,
+            ])
+            ->call('sortBy', 'surname')
+            ->assertSeeInOrder([
+                $overdueStudent2->email,
+                $overdueStudent1->email,
+            ])
+            ->call('sortBy', 'forenames')
+            ->assertSeeInOrder([
+                $overdueStudent2->email,
+                $overdueStudent1->email,
+            ])
+            ->call('sortBy', 'forenames')
+            ->assertSeeInOrder([
+                $overdueStudent1->email,
+                $overdueStudent2->email,
+            ])
+            ->call('sortBy', 'supervisorName')
+            ->assertSeeInOrder([
+                $overdueStudent2->email,
+                $overdueStudent1->email,
+            ])
+            ->call('sortBy', 'supervisorName')
+            ->assertSeeInOrder([
+                $overdueStudent1->email,
+                $overdueStudent2->email,
+            ])
+            ->call('sortBy', 'latestMeeting')
+            ->assertSeeInOrder([
+                $overdueStudent2->email,
+                $overdueStudent1->email,
+            ])
+            ->call('sortBy', 'latestMeeting')
+            ->assertSeeInOrder([
+                $overdueStudent1->email,
+                $overdueStudent2->email,
+            ]);
+
+
+
+    }
+
+    /** @test */
     public function admins_can_see_a_list_of_all_meetings_for_a_given_student(): void
     {
         $admin = User::factory()->admin()->create();
