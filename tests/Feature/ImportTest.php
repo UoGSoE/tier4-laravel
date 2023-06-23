@@ -162,10 +162,10 @@ class ImportTest extends TestCase
             'username' => $row[0] . strtolower($row[1][0]),
             'surname' => $row[1],
             'forenames' => $row[2],
-            'email' => strtolower($row[21]),
-            'supervisor_id' => User::where('email', '=', strtolower(trim($row[16])))->first()->id,
+            'email' => strtolower($row[14]),
+            'supervisor_id' => User::where('email', '=', strtolower(trim($row[4])))->first()->id,
             'type' => Student::TYPE_POSTGRAD_PROJECT,
-            'sub_type' => str_contains($row[5], 'Science') ? Student::SUB_TYPE_MSC : Student::SUB_TYPE_BMENG,
+            'sub_type' => str_contains($row[6], 'MSc') ? Student::SUB_TYPE_MSC : Student::SUB_TYPE_BMENG,
         ]));
 
         Mail::assertQueued(ImportProjectStudentsComplete::class, function ($mail) {
@@ -204,14 +204,14 @@ class ImportTest extends TestCase
             'username' => '2451294s',
             'surname' => 'Smith',
             'forenames' => 'Jenny',
-            'email' => '2234567b@student.example.com',
+            'email' => '2451294s@example.com',
             'supervisor_id' => null,
         ]);
         $lizTruss = Student::factory()->create([
-            'username' => '2488902s',
-            'surname' => 'Truss',
-            'forenames' => 'Liz',
-            'email' => '7234567b@student.example.com',
+            'username' => '2273665j',
+            'surname' => 'Jones',
+            'forenames' => 'Tom',
+            'email' => '2273665j@example.com',
             'supervisor_id' => null,
         ]);
         $pennyLane = User::factory()->create(['email' => 'penny.lane@example.com']);
@@ -230,12 +230,13 @@ class ImportTest extends TestCase
     protected function getGoodProjectRows(): array
     {
         return [
-            ["2451294","Smith","Jenny","04","2200","Bachelor of Engineering","H415-2200","Aeronautical Engineering,BEng","Enrollment","Full-Time","International",120,"Y","Y","Y","Fred Smith","fred.smith@example.com","UG Adv Stu","","","","2234567B@student.example.com","whatever@example.com","Tier 4 (General)","Valid to",12345,"blah","ASG"],
-            ["2491943","Smith","John","04","2200","Bachelor of Engineering","H415-2200","Aeronautical Engineering,BEng","Enrollment","Full-Time","International",120,"Y","Y","Y","Fred Smith","fred.smith@example.com","UG Adv Stu","","","","3234567B@student.example.com","whatever@example.com","Tier 4 (General)","Valid to",12345,"blah","ASG"],
-            ["2510913","McVitie","Jimmy","04","2200","Bachelor of Engineering","H641B-2200","BEng (Hons) EEE Micro 3+1...","Enrollment","Full-Time","International",120,"Y","Y","Y","Penny Lane","penny.lane@example.com","UG Adv Stu","","","","4234567B@student.example.com","whatever@example.com","Student Route","Valid to",12345,"blah","USD"],
-            ["2515040","Brown","Charlie","04","2200","Bachelor of Engineering","J750-2200","Biomedical Engineering,BEng","Enrollment","Full-Time","International",120,"Y","Y","Y","Mario Cart","mario.cart@example.com","UG Adv Stu","","","","5234567B@student.example.com","whatever@example.com","Tier 4 (General)","Valid to",12345,"blah","USD"],
-            ["2529228","Biden","Jill","04","2200","Bachelor of Engineering","J750-2200","Biomedical Engineering,BEng","Enrollment","Full-Time","International",120,"Y","Y","Y","Penny Lane","penny.lane@example.com","UG Adv Stu","","","","6234567B@student.example.com","whatever@example.com","Tier 4 (General)","Valid to",12345,"blah","USD"],
-            ["2488902","Truss","Liz","04","2200","Master of Science","J750-2200","Biomedical Engineering,BEng","Enrollment","Full-Time","International",120,"Y","Y","Y","Julia Smith","julia.smith@example.com","UG Adv Stu","","","","7234567B@student.example.com","whatever@example.com","Tier 4 (ATAS)","Valid to",12345,"blah","ASG"],
+            // ["Matric","Surname","Forenames","Supervisor Name","Supervisor Email","Programme code","Programme Name","Whatever","Load","Status","Credits","Fully Reg","Acad Reg","Fin Reg","Email"],
+            ["2273664","Smith","Jenny","Brian MacDunnie","fred.smith@example.com","H6N1-5200","Bachelor of Engineering","Enrollment","Full-Time","International","180","Y","Y","Y","2451294s@example.com"],
+            ["2273665","Jones","Tom","Sarah Johnson","penny.lane@example.com","H6N1-5200","Bachelor of Engineering","Enrollment","Full-Time","International","180","Y","Y","Y","2273665j@example.com"],
+            ["2273666","Brown","Charlie","John Smith","mario.cart@example.com","H6N1-5200","Bachelor of Engineering","Enrollment","Full-Time","International","180","Y","Y","Y","charlie@example.com"],
+            ["2273667","Doe","Jane","Mary Johnson","julia.smith@example.com","H6N1-5200","Bachelor of Engineering","Enrollment","Full-Time","International","180","Y","Y","Y","jane@example.com"],
+            ["2273668","Garcia","Maria","David Rodriguez","julia.smith@example.com","H6N1-5200","Bachelor of Engineering","Enrollment","Full-Time","International","180","Y","Y","Y","maria@example.com"],
+            ["2273669","Kim","Jin","Soo Lee","fred.smith@example.com","H6N1-5200","Elec & Elec Eng & Mgt,MSc","Enrollment","Full-Time","International","180","Y","Y","Y","jin@example.com"]
         ];
     }
 
@@ -243,19 +244,19 @@ class ImportTest extends TestCase
     {
         return [
             // header row - should _not_ be logged as an error
-            ["Matric","Surname","Forenames","","","","","","","","","","Y","Y","Y","Supervisor","","","","","Email","","Tier4 Status","","","blah","ASG"],
+            ["Matric","Surname","Forenames","Supervisor Name","Supervisor Email","Programme code","Programme Name","Whatever","Load","Status","Credits","Fully Reg","Acad Reg","Fin Reg","Email"],
             // missing matric
-            ["","Smith","Jenny","04","2200","Bachelor of Engineering","H415-2200","Aeronautical Engineering,BEng","Enrollment","Full-Time","International",120,"Y","Y","Y","Fred Smith","fred.smith@example.com","UG Adv Stu","","","","2234567B@student.example.com","whatever@example.com","Tier 4 (General)","Valid to",12345,"blah","ASG"],
+            ["","Smith","Jenny","Brian MacDunnie","fred.smith@example.com","H6N1-5200","Bachelor of Engineering","Enrollment","Full-Time","International","180","Y","Y","Y","jenny@example.com"],
             // invalid supervisor email
-            ["2491943","Smith","John","04","2200","Bachelor of Engineering","H415-2200","Aeronautical Engineering,BEng","Enrollment","Full-Time","International",120,"Y","Y","Y","Fred Smith","fred.smith@","UG Adv Stu","","","","3234567B@student.example.com","whatever@example.com","Tier 4 (General)","Valid to",12345,"blah","ASG"],
+            ["2273665","Jones","Tom","Sarah Johnson","sarah@","H6N1-5200","Bachelor of Engineering","Enrollment","Full-Time","International","180","Y","Y","Y","tom@example.com"],
             // invalid matric
-            ["hello","McVitie","Jimmy","04","2200","Bachelor of Engineering","H641B-2200","BEng (Hons) EEE Micro 3+1...","Enrollment","Full-Time","International",120,"Y","Y","Y","Penny Lane","penny.lane@example.com","UG Adv Stu","","","","4234567B@student.example.com","whatever@example.com","Student Route","Valid to",12345,"blah","USD"],
-            // missing email
-            ["2515040","Brown","Charlie","04","2200","Bachelor of Engineering","J750-2200","Biomedical Engineering,BEng","Enrollment","Full-Time","International",120,"Y","Y","Y","Mario Cart","mario.cart@example.com","UG Adv Stu","","","","","whatever@example.com","Tier 4 (General)","Valid to",12345,"blah","USD"],
+            ["hello","Brown","Charlie","John Smith","penny.lane@example.com","H6N1-5200","Bachelor of Engineering","Enrollment","Full-Time","International","180","Y","Y","Y","charlie@example.com"],
+            // missing student email
+            ["2273667","Doe","Jane","Mary Johnson","fred.smith@example.com","H6N1-5200","Bachelor of Engineering","Enrollment","Full-Time","International","180","Y","Y","Y",""],
             // missing forename
-            ["2529228","Biden","","04","2200","Bachelor of Engineering","J750-2200","Biomedical Engineering,BEng","Enrollment","Full-Time","International",120,"Y","Y","Y","Penny Lane","penny.lane@example.com","UG Adv Stu","","","","6234567B@student.example.com","whatever@example.com","Tier 4 (General)","Valid to",12345,"blah","USD"],
-            // invalid email
-            ["2488902","Truss","Liz","04","2200","Bachelor of Engineering","J750-2200","Biomedical Engineering,BEng","Enrollment","Full-Time","International",120,"Y","Y","Y","Julia Smith","julia.smith@example.com","UG Adv Stu","","","","7234567B@","whatever@example.com","Tier 4 (ATAS)","Valid to",12345,"blah","ASG"],
+            ["2273668","Garcia","","David Rodriguez","penny.lane@example.com","H6N1-5200","Bachelor of Engineering","Enrollment","Full-Time","International","180","Y","Y","Y","maria@example.com"],
+            // invalid student email
+            ["2273669","Kim","Jin","Soo Lee","penny.lane@example.com","H6N1-5200","Elec & Elec Eng & Mgt,MSc","Enrollment","Full-Time","International","180","Y","Y","Y","jin@"]
         ];
     }
 

@@ -51,7 +51,7 @@ class StudentsMeetingsReport extends Component
             ->when(! $this->includeInactive, fn ($query) => $query->active())
             ->when($this->onlyOverdue, fn ($query) => $query->overdue(option($optionName, 28)))
             ->with(['latestMeeting', 'supervisor', 'latestNote'])
-            ->when(in_array($this->sortField, ['surname', 'forenames', 'username']), fn ($query) => $query->orderBy($this->sortField, $this->sortDirection))
+            ->when(in_array($this->sortField, ['surname', 'forenames', 'username', 'email']), fn ($query) => $query->orderBy($this->sortField, $this->sortDirection))
             ->get();
 
         if ($this->sortField === 'latestMeeting') {

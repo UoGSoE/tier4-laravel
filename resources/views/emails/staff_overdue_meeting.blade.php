@@ -1,5 +1,5 @@
 <x-mail::message>
-# Tier4 - Overdue meetings
+# Tier4 - Overdue PhD meetings
 
 @if ($overdueStudents->count() > 1)
     You have overdue meetings with the following students:

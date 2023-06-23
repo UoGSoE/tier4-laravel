@@ -15,50 +15,28 @@
                     </div>
                 </div>
             </div>
-            <div class="column">
-                <div class="field">
-                    <div class="control">
-                        <label class="label">Postgrad Project Meeting Frequency (in days)</label>
-                        <input class="input" type="number" name="postgrad_project_meeting_reminder_days" value="{{ option('postgrad_project_meeting_reminder_days') }}" min="1">
-                    </div>
-                </div>
-            </div>
         </div>
 
         <div class="columns">
             <div class="column">
-                <label class="label">Postgrad Project Start (Month / Day)</label>
-                <div class="field is-grouped">
-                    <div class="control">
-                      <div class="select">
-                        <select name="postgrad_project_start_month">
-                            @foreach ($months as $index => $name)
-                                <option value="{{ $index }}" @selected(option('postgrad_project_start_month') == $index)>{{ $name }}</option>
-                            @endforeach
-                        </select>
-                      </div>
+                <label class="label">Postgrad Project Email Dates (dd/mm/yyyy)</label>
+                @foreach (range(1, 5) as $i)
+                    <div class="field">
+                        <div class="control">
+                            <input
+                                x-data
+                                x-on:change="$dispatch('input', $event.target.value)"
+                                x-init="flatpickr($refs.pickr, { dateFormat: 'd/m/Y', defaultDate: '{{ option("postgrad_project_email_date_{$i}") ? \Carbon\Carbon::createFromFormat('Y-m-d', option("postgrad_project_email_date_{$i}"))->format('d/m/Y') : "" }}' })"
+                                x-ref="pickr"
+                                name="postgrad_project_email_date_{{ $i }}"
+                                class="input"
+                                type="text"
+                                placeholder="dd/mm/yyyy"
+                                value="{{ option("postgrad_project_email_date_{$i}") ? \Carbon\Carbon::createFromFormat('Y-m-d', option("postgrad_project_email_date_{$i}"))->format('d/m/Y') : "" }}"
+                            >
+                        </div>
                     </div>
-                    <div class="control">
-                        <input class="input" type="number" name="postgrad_project_start_day" value="{{ option('postgrad_project_start_day') }}" min="1" max="31">
-                    </div>
-                </div>
-            </div>
-            <div class="column">
-                <label class="label">Postgrad Project End (Month / Day)</label>
-                <div class="field is-grouped">
-                    <div class="control">
-                      <div class="select">
-                        <select name="postgrad_project_end_month">
-                            @foreach ($months as $index => $name)
-                                <option value="{{ $index }}" @selected(option('postgrad_project_end_month') == $index)>{{ $name }}</option>
-                            @endforeach
-                        </select>
-                      </div>
-                    </div>
-                    <div class="control">
-                        <input class="input" type="number" name="postgrad_project_end_day" value="{{ option('postgrad_project_end_day') }}" min="1" max="31">
-                    </div>
-                </div>
+                @endforeach
             </div>
         </div>
 

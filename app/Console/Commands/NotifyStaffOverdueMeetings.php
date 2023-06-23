@@ -2,10 +2,12 @@
 
 namespace App\Console\Commands;
 
-use App\Events\SomethingHappened;
-use App\Mail\StaffOverdueMeeting;
 use App\Models\User;
 use Illuminate\Console\Command;
+use App\Events\SomethingHappened;
+use App\Mail\StaffOverdueMeeting;
+use Illuminate\Support\Collection;
+use App\Mail\ProjectStudentReminder;
 use Illuminate\Support\Facades\Mail;
 
 class NotifyStaffOverdueMeetings extends Command
@@ -29,12 +31,20 @@ class NotifyStaffOverdueMeetings extends Command
      */
     public function handle(): int
     {
-        $phdAdmins = User::active()->admin()->wantsPhdEmails()->get();
-        $postgradProjectAdmins = User::active()->admin()->wantsPostgradProjectEmails()->get();
         $staffList = User::active()->with('students.latestMeeting')->get();
+        $this->handlePhdStudents($staffList);
+        $this->handleProjectStudents($staffList);
 
-        $staffList->each(function ($staffMember) use ($phdAdmins, $postgradProjectAdmins) {
+        return Command::SUCCESS;
+    }
+
+    public function handlePhdStudents(Collection $staffList): void
+    {
+        $phdAdmins = User::active()->admin()->wantsPhdEmails()->get();
+
+        $staffList->each(function ($staffMember) use ($phdAdmins) {
             $overdueStudents = $staffMember->students
+                ->filter(fn ($student) => $student->isPhdStudent())
                 ->filter(fn ($student) => $student->isActive() && $student->isntSilenced())
                 ->filter(fn ($student) => $student->isOverdue())
                 ->filter(fn ($student) => $student->hasntBeenAlertedAboutRecently());
@@ -42,21 +52,48 @@ class NotifyStaffOverdueMeetings extends Command
             if ($overdueStudents->count() == 0) {
                 return;
             }
-            $bccAddresses = collect([]);
-            if ($overdueStudents->contains(fn ($student) => $student->isPhdStudent())) {
-                $bccAddresses = $bccAddresses->merge($phdAdmins->pluck('email'));
-            }
-            if ($overdueStudents->contains(fn ($student) => $student->isPostgradProjectStudent())) {
-                $bccAddresses = $bccAddresses->merge($postgradProjectAdmins->pluck('email'));
-            }
+
+            $bccAddresses = $phdAdmins->pluck('email');
 
             Mail::to($staffMember)->bcc($bccAddresses->unique())->later(now()->addSeconds(rand(10, 15 * 60)), new StaffOverdueMeeting($overdueStudents));
 
             $overdueStudents->each(fn ($student) => $student->updateAlertedAbout());
 
-            event(new SomethingHappened("Email sent to {$staffMember->email} about overdue meetings for {$overdueStudents->pluck('email')->implode(', ')}"));
+            event(new SomethingHappened("Email sent to {$staffMember->email} about overdue PhD meetings for {$overdueStudents->pluck('email')->implode(', ')}"));
         });
+    }
 
-        return Command::SUCCESS;
+    public function handleProjectStudents(Collection $staffList): void
+    {
+        $today = now()->format('Y-m-d');
+        $shouldSendToday = false;
+        foreach (range(1, 5) as $i) {
+            if (option("postgrad_project_email_date_{$i}") == $today) {
+                $shouldSendToday = true;
+            }
+        }
+
+        if (!$shouldSendToday) {
+            return;
+        }
+
+        $postgradProjectAdmins = User::active()->admin()->wantsPostgradProjectEmails()->get();
+        $staffList->each(function ($staffMember) use ($postgradProjectAdmins) {
+            $projectStudents = $staffMember->students
+                ->filter(fn ($student) => $student->isPostgradProjectStudent())
+                ->filter(fn ($student) => $student->isActive() && $student->isntSilenced());
+
+            if ($projectStudents->count() == 0) {
+                return;
+            }
+
+            $bccAddresses = $postgradProjectAdmins->pluck('email');
+
+            Mail::to($staffMember)->bcc($bccAddresses->unique())->later(now()->addSeconds(rand(10, 15 * 60)), new ProjectStudentReminder());
+
+            $projectStudents->each(fn ($student) => $student->updateAlertedAbout());
+
+            event(new SomethingHappened("Email sent to {$staffMember->email} about overdue project student meetings for {$projectStudents->pluck('email')->implode(', ')}"));
+        });
     }
 }

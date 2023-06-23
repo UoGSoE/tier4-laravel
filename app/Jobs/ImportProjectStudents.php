@@ -42,9 +42,10 @@ class ImportProjectStudents implements ShouldQueue
                     'matric' => $rowContents[0],
                     'surname' => $rowContents[1],
                     'forenames' => $rowContents[2],
-                    'email' => $rowContents[21],
-                    'supervisor_email' => $rowContents[16],
-                    'sub_type' => $rowContents[5],
+                    'email' => $rowContents[14],
+                    'supervisor_email' => $rowContents[4],
+                    'supervisor_name' => $rowContents[3],
+                    'sub_type' => $rowContents[6],
                 ],
                 [
                     'matric' => 'required|integer',
@@ -52,6 +53,7 @@ class ImportProjectStudents implements ShouldQueue
                     'forenames' => 'required|string',
                     'email' => 'required|email',
                     'supervisor_email' => 'required|email',
+                    'supervisor_name' => 'required|string',
                     'sub_type' => 'required|string',
                 ]
             );
@@ -66,38 +68,38 @@ class ImportProjectStudents implements ShouldQueue
                 continue;
             }
 
-            $supervisor = User::where('email', '=', strtolower(trim($rowContents[16])))->first();
+            $validatedData = $validator->validated();
+
+            $supervisor = User::where('email', '=', strtolower(trim($validatedData['supervisor_email'])))->first();
             if (! $supervisor) {
-                $username = \Ohffs\Ldap\LdapFacade::findUserByEmail(strtolower(trim($rowContents[16])))?->username;
+                $username = \Ohffs\Ldap\LdapFacade::findUserByEmail(strtolower(trim($validatedData['supervisor_email'])))?->username;
                 if (! $username) {
-                    $errors[] = "Row {$excelRowNumber}: Could not find supervisor with email {$rowContents[16]}";
+                    $errors[] = "Row {$excelRowNumber}: Could not find supervisor with email {$validatedData['supervisor_email']}";
                     continue;
                 }
                 $supervisor = new User();
                 $supervisor->username = $username;
                 $supervisor->password = bcrypt(Str::random(64));
-                $supervisor->email = strtolower(trim($rowContents[16]));
-                $nameParts = explode(" ", Str::squish($rowContents[15]));
+                $supervisor->email = strtolower(trim($validatedData['supervisor_email']));
+                $nameParts = explode(" ", Str::squish($validatedData['supervisor_name']));
                 $supervisor->surname = array_pop($nameParts);
                 $supervisor->forenames = implode(" ", $nameParts);
                 $supervisor->is_staff = true;
-                $supervisor->wants_postgrad_project_emails = true;
-                $supervisor->wants_phd_emails = true;
                 $supervisor->save();
             }
 
-            $email = strtolower(trim($rowContents[21]));
+            $email = strtolower(trim($validatedData['email']));
             $student = Student::where('email', '=', $email)->first();
             $subType = Student::SUB_TYPE_BMENG;
-            if (preg_match('/science/i', $rowContents[5])) {
+            if (preg_match('/msc/i', $validatedData['sub_type'])) {
                 $subType = Student::SUB_TYPE_MSC;
             }
             if (! $student) {
                 $student = new Student();
                 $student->email = $email;
-                $student->username = $rowContents[0] . strtolower($rowContents[1][0]);
-                $student->forenames = $rowContents[2];
-                $student->surname = $rowContents[1];
+                $student->username = $validatedData['matric'] . strtolower($validatedData['surname'][0]);
+                $student->forenames = $validatedData['forenames'];
+                $student->surname = $validatedData['surname'];
                 $student->type = Student::TYPE_POSTGRAD_PROJECT;
                 $student->sub_type = $subType;
                 $student->save();

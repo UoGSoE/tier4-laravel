@@ -170,8 +170,8 @@ class ReportTest extends TestCase
         $notOverdueStudent = Student::factory()->postgradProject()->create(['supervisor_id' => $staff1->id, 'surname' => 'eeeeeeee']);
         $overdueButInactiveStudent = Student::factory()->postgradProject()->inactive()->create(['supervisor_id' => $staff1->id, 'surname' => 'rrrrrrrr']);
         $phdStudent = Student::factory()->create(['supervisor_id' => $staff1->id]);
-        $staff1->meetings()->create(['student_id' => $overdueStudent1->id, 'meeting_at' => now()->subDays(30)]);
-        $staff2->meetings()->create(['student_id' => $overdueStudent2->id, 'meeting_at' => now()->subDays(30)]);
+        $staff1->meetings()->create(['student_id' => $overdueStudent1->id, 'meeting_at' => now()->subDays(32)]);
+        $staff2->meetings()->create(['student_id' => $overdueStudent2->id, 'meeting_at' => now()->subDays(34)]);
         $staff1->meetings()->create(['student_id' => $notOverdueStudent->id, 'meeting_at' => now()->subDays(3)]);
         $staff1->meetings()->create(['student_id' => $overdueButInactiveStudent->id, 'meeting_at' => now()->subDays(30)]);
         $staff1->meetings()->create(['student_id' => $phdStudent->id, 'meeting_at' => now()->subDays(30)]);
