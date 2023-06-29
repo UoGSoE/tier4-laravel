@@ -1,10 +1,21 @@
 @extends('layouts.app')
 @section('content')
 
-<h3 class="title is-3">
-    Details for student <a href="{{ route('reports.student', $student) }}">{{ $student->full_name }}</a>
-    (<a href="mailto:{{ $student->email }}">{{ $student->email }}</a>)
-</h3>
+<div class="level">
+    <div class="level-left">
+        <div class="level-item">
+            <h3 class="title is-3">
+                Details for student <a href="{{ route('reports.student', $student) }}">{{ $student->full_name }}</a>
+                (<a href="mailto:{{ $student->email }}">{{ $student->email }}</a>)
+            </h3>
+        </div>
+    </div>
+    <div class="level-right">
+        <div class="level-item">
+            <a href="{{ route('admin.student.confirm_delete', $student) }}" class="button is-outlined is-danger">Delete Student</a>
+        </div>
+    </div>
+</div>
 
 <div class="box">
     <form action="{{ route('admin.student.update', $student) }}" method="post">

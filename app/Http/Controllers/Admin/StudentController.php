@@ -49,4 +49,19 @@ class StudentController extends Controller
 
         return redirect()->route('admin.student.show', $student)->with('success', 'Student updated!');
     }
+
+    public function confirmDestroy(Student $student): View
+    {
+        return view('admin.student.confirm_delete', [
+            'student' => $student,
+        ]);
+    }
+
+    public function destroy(Student $student): RedirectResponse
+    {
+        $student->delete();
+
+        return redirect()->route('home')->with('success', "Student '{$student->full_name}' deleted");
+    }
+
 }

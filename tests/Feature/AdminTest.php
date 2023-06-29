@@ -86,6 +86,53 @@ class AdminTest extends TestCase
     }
 
     /** @test */
+    public function the_edit_student_page_has_a_link_to_the_delete_student_confirmation_page()
+    {
+        $admin = User::factory()->admin()->create();
+        $student = Student::factory()->create();
+
+        $response = $this->actingAs($admin)->get(route('admin.student.show', $student));
+
+        $response->assertOk();
+        $response->assertViewIs('admin.student.show');
+        $response->assertViewHas('student', $student);
+        $response->assertSee(route('admin.student.confirm_delete', $student));
+    }
+
+    /** @test */
+    public function admins_can_view_the_confirm_delete_student_page()
+    {
+        $admin = User::factory()->admin()->create();
+        $student = Student::factory()->create();
+
+        $response = $this->actingAs($admin)->get(route('admin.student.confirm_delete', $student));
+
+        $response->assertOk();
+        $response->assertViewIs('admin.student.confirm_delete');
+        $response->assertViewHas('student', $student);
+        $response->assertSee($student->full_name);
+        $response->assertSee(route('admin.student.delete', $student));
+    }
+
+    /** @test */
+    public function admins_can_delete_a_student()
+    {
+        // Note: not entirely sure they should be able to do this but it's a
+        // 'thing' if they upload incorrect data via the spreadsheets
+        $admin = User::factory()->admin()->create();
+        $student = Student::factory()->create();
+        $student2 = Student::factory()->create();
+
+        $response = $this->actingAs($admin)->post(route('admin.student.delete', $student));
+
+        $response->assertRedirect(route('home'));
+        $response->assertSessionHasNoErrors();
+        $response->assertSessionHas('success', "Student '{$student->full_name}' deleted");
+        $this->assertNull($student->fresh());
+        $this->assertNotNull($student2->fresh());
+    }
+
+    /** @test */
     public function admins_can_edit_notes(): void
     {
         $admin = User::factory()->admin()->create();

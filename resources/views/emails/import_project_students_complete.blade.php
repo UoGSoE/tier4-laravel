@@ -6,6 +6,7 @@
 @foreach ($errors as $error)
 - {{ $error }}
 @endforeach
+@endif
 
 <x-mail::button url="{{ route('home') }}">
 Go to Tier4

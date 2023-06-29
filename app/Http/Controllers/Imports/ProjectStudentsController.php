@@ -17,10 +17,10 @@ class ProjectStudentsController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'sheet' => 'required|file|mimes:xlsx',
+            'sheet' => 'required|file|mimes:xlsx,xls',
         ]);
 
-        $sheetData = (new \Ohffs\SimpleSpout\ExcelSheet())->import($request->file('sheet')->getPathname());
+        $sheetData = (new \Ohffs\SimpleSpout\ExcelSheet())->import($request->file('sheet')->path());
 
         ImportProjectStudents::dispatch($sheetData, $request->user()->email);
 

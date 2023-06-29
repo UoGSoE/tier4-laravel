@@ -34,6 +34,9 @@ Route::middleware('auth')->group(function () {
 
         Route::get('/student/{student}', [\App\Http\Controllers\Admin\StudentController::class, 'show'])->name('admin.student.show');
         Route::post('/student/{student}', [\App\Http\Controllers\Admin\StudentController::class, 'update'])->name('admin.student.update');
+        Route::get('/student/{student}/delete', [\App\Http\Controllers\Admin\StudentController::class, 'confirmDestroy'])->name('admin.student.confirm_delete');
+        Route::post('/student/{student}/delete', [\App\Http\Controllers\Admin\StudentController::class, 'destroy'])->name('admin.student.delete');
+
         Route::post('/note/{note}/update', [\App\Http\Controllers\StudentNoteController::class, 'update'])->name('admin.student.notes.update');
         Route::post('/note/{note}/delete', [\App\Http\Controllers\StudentNoteController::class, 'destroy'])->name('admin.student.notes.delete');
 

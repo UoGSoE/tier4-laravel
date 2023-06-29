@@ -49,8 +49,8 @@ class ImportProjectStudents implements ShouldQueue
                 ],
                 [
                     'matric' => 'required|integer',
-                    'surname' => 'required|string',
-                    'forenames' => 'required|string',
+                    'surname' => ['required', 'string', 'regex:/[a-zA-Z]+/'],
+                    'forenames' => ['required', 'string', 'regex:/[a-zA-Z]+/'],
                     'email' => 'required|email',
                     'supervisor_email' => 'required|email',
                     'supervisor_name' => 'required|string',
@@ -72,13 +72,13 @@ class ImportProjectStudents implements ShouldQueue
 
             $supervisor = User::where('email', '=', strtolower(trim($validatedData['supervisor_email'])))->first();
             if (! $supervisor) {
-                $username = \Ohffs\Ldap\LdapFacade::findUserByEmail(strtolower(trim($validatedData['supervisor_email'])))?->username;
-                if (! $username) {
+                $ldapUser = \Ohffs\Ldap\LdapFacade::findUserByEmail(strtolower(trim($validatedData['supervisor_email'])));
+                if (! $ldapUser) {
                     $errors[] = "Row {$excelRowNumber}: Could not find supervisor with email {$validatedData['supervisor_email']}";
                     continue;
                 }
                 $supervisor = new User();
-                $supervisor->username = $username;
+                $supervisor->username = $ldapUser->username;
                 $supervisor->password = bcrypt(Str::random(64));
                 $supervisor->email = strtolower(trim($validatedData['supervisor_email']));
                 $nameParts = explode(" ", Str::squish($validatedData['supervisor_name']));
