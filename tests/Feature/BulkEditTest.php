@@ -12,7 +12,7 @@ class BulkEditTest extends TestCase
     use RefreshDatabase;
 
     /** @test */
-    public function admins_can_see_the_bulk_edit_page_for_students_of_a_given_type()
+    public function admins_can_see_the_bulk_edit_page_for_students_of_a_given_type(): void
     {
         $this->withoutExceptionHandling();
         $admin = User::factory()->admin()->create();
@@ -35,7 +35,7 @@ class BulkEditTest extends TestCase
     }
 
     /** @test */
-    public function active_and_inactive_students_appear_on_the_bulk_edit_page()
+    public function active_and_inactive_students_appear_on_the_bulk_edit_page(): void
     {
         $this->withoutExceptionHandling();
         $admin = User::factory()->admin()->create();
@@ -58,7 +58,7 @@ class BulkEditTest extends TestCase
     }
 
     /** @test */
-    public function only_students_with_meetings_in_the_past_six_months_appear_on_the_bulk_edit_page()
+    public function only_students_with_meetings_in_the_past_six_months_appear_on_the_bulk_edit_page(): void
     {
         $this->withoutExceptionHandling();
         $admin = User::factory()->admin()->create();
@@ -81,7 +81,7 @@ class BulkEditTest extends TestCase
     }
 
     /** @test */
-    public function admins_can_bulk_edit_the_students_flags()
+    public function admins_can_bulk_edit_the_students_flags(): void
     {
         $this->withoutExceptionHandling();
         $admin = User::factory()->admin()->create();

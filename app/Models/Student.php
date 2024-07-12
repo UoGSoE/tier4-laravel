@@ -2,6 +2,9 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 use App\Proxies\CachedOption;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -41,27 +44,27 @@ class Student extends Model
         ];
     }
 
-    public function supervisor()
+    public function supervisor(): BelongsTo
     {
         return $this->belongsTo(User::class, 'supervisor_id');
     }
 
-    public function meetings()
+    public function meetings(): HasMany
     {
         return $this->hasMany(Meeting::class, 'student_id');
     }
 
-    public function latestMeeting()
+    public function latestMeeting(): HasOne
     {
         return $this->hasOne(Meeting::class, 'student_id')->latestOfMany('meeting_at');
     }
 
-    public function notes()
+    public function notes(): HasMany
     {
         return $this->hasMany(StudentNote::class);
     }
 
-    public function latestNote()
+    public function latestNote(): HasOne
     {
         return $this->hasOne(StudentNote::class)->latestOfMany('updated_at');
     }

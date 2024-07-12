@@ -129,7 +129,7 @@ class ImportTest extends TestCase
     }
 
     /** @test */
-    public function admins_can_upload_the_project_students_from_their_mycampus_export()
+    public function admins_can_upload_the_project_students_from_their_mycampus_export(): void
     {
         Queue::fake();
         $admin = User::factory()->admin()->create();
@@ -146,7 +146,7 @@ class ImportTest extends TestCase
     }
 
     /** @test */
-    public function the_import_project_students_job_does_the_right_stuff()
+    public function the_import_project_students_job_does_the_right_stuff(): void
     {
         Mail::fake();
         $this->fakeLdapConnection();
@@ -172,7 +172,7 @@ class ImportTest extends TestCase
     }
 
     /** @test */
-    public function the_import_project_students_job_logs_errors_on_malformed_data()
+    public function the_import_project_students_job_logs_errors_on_malformed_data(): void
     {
         Mail::fake();
         $this->fakeLdapConnection();
@@ -193,7 +193,7 @@ class ImportTest extends TestCase
     }
 
     /** @test */
-    public function the_import_project_students_job_doesnt_duplicate_existing_records()
+    public function the_import_project_students_job_doesnt_duplicate_existing_records(): void
     {
         Mail::fake();
         $this->fakeLdapConnection();

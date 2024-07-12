@@ -13,7 +13,7 @@ class ActivityTest extends TestCase
     use RefreshDatabase;
 
     /** @test */
-    public function we_can_manually_record_an_activity_message()
+    public function we_can_manually_record_an_activity_message(): void
     {
         Activity::create([
             'message' => 'A student was created',
@@ -24,13 +24,13 @@ class ActivityTest extends TestCase
     }
 
     /** @test */
-    public function there_is_a_scheduled_artisan_command_which_trims_the_activity_table()
+    public function there_is_a_scheduled_artisan_command_which_trims_the_activity_table(): void
     {
         $this->assertCommandIsScheduled('tier4:trim-activity-table');
     }
 
     /** @test */
-    public function the_scheduled_artisan_command_trims_the_activity_table()
+    public function the_scheduled_artisan_command_trims_the_activity_table(): void
     {
         config(['tier4.activity_table_trim_days' => 7]);
         Activity::factory()->count(10)->create(['created_at' => now()->subDays(10)]);
@@ -42,7 +42,7 @@ class ActivityTest extends TestCase
     }
 
     /** @test */
-    public function we_can_fire_an_event_which_will_cause_activity_to_be_logged()
+    public function we_can_fire_an_event_which_will_cause_activity_to_be_logged(): void
     {
         $this->assertCount(0, Activity::all());
 
@@ -54,7 +54,7 @@ class ActivityTest extends TestCase
     }
 
     /** @test */
-    public function there_is_a_page_where_admin_users_can_see_the_event_log()
+    public function there_is_a_page_where_admin_users_can_see_the_event_log(): void
     {
         $this->withoutExceptionHandling();
         $admin = User::factory()->admin()->create();

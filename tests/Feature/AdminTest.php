@@ -86,7 +86,7 @@ class AdminTest extends TestCase
     }
 
     /** @test */
-    public function the_edit_student_page_has_a_link_to_the_delete_student_confirmation_page()
+    public function the_edit_student_page_has_a_link_to_the_delete_student_confirmation_page(): void
     {
         $admin = User::factory()->admin()->create();
         $student = Student::factory()->create();
@@ -100,7 +100,7 @@ class AdminTest extends TestCase
     }
 
     /** @test */
-    public function admins_can_view_the_confirm_delete_student_page()
+    public function admins_can_view_the_confirm_delete_student_page(): void
     {
         $admin = User::factory()->admin()->create();
         $student = Student::factory()->create();
@@ -115,7 +115,7 @@ class AdminTest extends TestCase
     }
 
     /** @test */
-    public function admins_can_delete_a_student()
+    public function admins_can_delete_a_student(): void
     {
         // Note: not entirely sure they should be able to do this but it's a
         // 'thing' if they upload incorrect data via the spreadsheets
