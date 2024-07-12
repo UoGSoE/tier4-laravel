@@ -15,9 +15,12 @@ class StudentNote extends Model
         'user_id',
     ];
 
-    protected $casts = [
-        'body' => 'encrypted',
-    ];
+    protected function casts(): array
+    {
+        return [
+            'body' => 'encrypted',
+        ];
+    }
 
     public function student()
     {

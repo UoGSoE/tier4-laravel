@@ -32,11 +32,14 @@ class Student extends Model
         'last_alerted_about',
     ];
 
-    protected $casts = [
-        'is_active' => 'boolean',
-        'is_silenced' => 'boolean',
-        'last_alerted_about' => 'datetime',
-    ];
+    protected function casts(): array
+    {
+        return [
+            'is_active' => 'boolean',
+            'is_silenced' => 'boolean',
+            'last_alerted_about' => 'datetime',
+        ];
+    }
 
     public function supervisor()
     {
