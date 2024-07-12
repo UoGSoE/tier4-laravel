@@ -80,7 +80,7 @@ class UserList extends Component
             'password' => bcrypt(Str::random(64)),
         ]);
 
-        SomethingHappened::dispatch(auth()->user()->full_name . ' created a new admin user ' . $this->username);
+        SomethingHappened::dispatch(auth()->user()->full_name.' created a new admin user '.$this->username);
 
         $this->reset();
     }
@@ -93,7 +93,7 @@ class UserList extends Component
         $demotedUser = User::findOrFail($userId);
         $demotedUser->update(['is_admin' => false]);
 
-        SomethingHappened::dispatch(auth()->user()->full_name . ' demoted a user ' . $demotedUser->username);
+        SomethingHappened::dispatch(auth()->user()->full_name.' demoted a user '.$demotedUser->username);
 
         $this->reset();
     }
@@ -105,6 +105,6 @@ class UserList extends Component
             $emailType => ! $user->$emailType,
         ]);
 
-        SomethingHappened::dispatch(auth()->user()->full_name . ' toggled ' . $emailType . ' for ' . $user->username);
+        SomethingHappened::dispatch(auth()->user()->full_name.' toggled '.$emailType.' for '.$user->username);
     }
 }

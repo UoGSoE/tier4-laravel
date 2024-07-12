@@ -2,12 +2,11 @@
 
 namespace Tests\Feature;
 
-use Tests\TestCase;
-use App\Models\Activity;
 use App\Events\SomethingHappened;
+use App\Models\Activity;
 use App\Models\User;
-use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Tests\TestCase;
 
 class ActivityTest extends TestCase
 {
@@ -69,6 +68,4 @@ class ActivityTest extends TestCase
 
         Activity::all()->each(fn ($activity) => $response->assertSee($activity->message));
     }
-
-
 }

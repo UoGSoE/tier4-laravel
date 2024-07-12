@@ -8,7 +8,6 @@ use App\Models\Student;
 use App\Models\StudentNote;
 use App\Models\User;
 use Illuminate\Database\Seeder;
-use Illuminate\Notifications\Action;
 
 class TestDataSeeder extends Seeder
 {

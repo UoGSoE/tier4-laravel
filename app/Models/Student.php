@@ -16,6 +16,7 @@ class Student extends Model
     public const TYPE_PHD = 'phd';
 
     public const SUB_TYPE_MSC = 'msc';
+
     public const SUB_TYPE_BMENG = 'bmeng';
 
     protected $fillable = [
@@ -181,5 +182,4 @@ class Student extends Model
     {
         $this->update(['last_alerted_about' => now()]);
     }
-
 }

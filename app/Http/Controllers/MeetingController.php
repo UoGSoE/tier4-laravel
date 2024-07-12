@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use Carbon\Carbon;
-use Illuminate\Http\Request;
 use App\Events\SomethingHappened;
+use Carbon\Carbon;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Request;
 
 class MeetingController extends Controller
 {
@@ -27,7 +27,7 @@ class MeetingController extends Controller
                     ->where('meeting_at', Carbon::createFromFormat('d/m/Y', $meeting['date']))
                     ->first();
 
-                if (!$existingMeeting) {
+                if (! $existingMeeting) {
                     $request->user()->meetings()->create([
                         'student_id' => $meeting['student_id'],
                         'meeting_at' => Carbon::createFromFormat('d/m/Y', $meeting['date']),

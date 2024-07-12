@@ -2,15 +2,14 @@
 
 namespace Tests\Feature;
 
-use Carbon\Carbon;
-use Tests\TestCase;
-use App\Models\User;
-use App\Models\Student;
-use App\Mail\StaffOverdueMeeting;
 use App\Mail\ProjectStudentReminder;
-use Illuminate\Support\Facades\Mail;
+use App\Mail\StaffOverdueMeeting;
+use App\Models\Student;
+use App\Models\User;
+use Carbon\Carbon;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use App\Console\Commands\NotifyStaffOverdueMeetings;
+use Illuminate\Support\Facades\Mail;
+use Tests\TestCase;
 
 class StaffNotificationTest extends TestCase
 {

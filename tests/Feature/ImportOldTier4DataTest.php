@@ -156,7 +156,6 @@ class ImportOldTier4DataTest extends TestCase
         $this->assertDatabaseCount('student_notes', 1);
     }
 
-
     protected function setUpFakeDatabase()
     {
         config([

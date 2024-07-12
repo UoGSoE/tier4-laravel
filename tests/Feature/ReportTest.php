@@ -156,7 +156,7 @@ class ReportTest extends TestCase
         Livewire::actingAs($admin)->test('students-meetings-report', ['type' => Student::TYPE_POSTGRAD_PROJECT])
             ->set('filter', 'qqqqqqq')
             ->call('exportExcel')
-            ->assertFileDownloaded('students-meetings-report-' . now()->format('Y-m-d') . '.xlsx');
+            ->assertFileDownloaded('students-meetings-report-'.now()->format('Y-m-d').'.xlsx');
     }
 
     /** @test */
@@ -218,8 +218,6 @@ class ReportTest extends TestCase
                 $overdueStudent1->email,
                 $overdueStudent2->email,
             ]);
-
-
 
     }
 
@@ -370,5 +368,4 @@ class ReportTest extends TestCase
             ->assertSee($student2->full_name)
             ->assertSee($student3->full_name);
     }
-
 }
