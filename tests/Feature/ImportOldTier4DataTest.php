@@ -161,7 +161,7 @@ class ImportOldTier4DataTest extends TestCase
         config([
             'database.connections.oldtier4' => [
                 'driver' => 'sqlite',
-                'url' => env('DATABASE_URL'),
+                'url' => env('DB_URL'),
                 'database' => base_path().'/tests/fixtures/oldtier4.sqlite',
                 'prefix' => '',
                 'foreign_key_constraints' => env('DB_FOREIGN_KEYS', true),
