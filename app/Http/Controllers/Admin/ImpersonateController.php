@@ -15,7 +15,7 @@ class ImpersonateController extends Controller
             return redirect()->route('home');
         }
 
-        SomethingHappened::dispatch(auth()->user()->full_name . ' started impersonating ' . $user->full_name);
+        SomethingHappened::dispatch(auth()->user()->full_name.' started impersonating '.$user->full_name);
 
         auth()->user()->impersonate($user);
 
@@ -26,7 +26,7 @@ class ImpersonateController extends Controller
     {
         auth()->user()->leaveImpersonation();
 
-        SomethingHappened::dispatch(auth()->user()->full_name . ' stopped impersonating');
+        SomethingHappened::dispatch(auth()->user()->full_name.' stopped impersonating');
 
         return redirect()->route('home');
     }

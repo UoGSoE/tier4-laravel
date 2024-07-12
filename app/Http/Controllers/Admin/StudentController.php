@@ -63,5 +63,4 @@ class StudentController extends Controller
 
         return redirect()->route('home')->with('success', "Student '{$student->full_name}' deleted");
     }
-
 }

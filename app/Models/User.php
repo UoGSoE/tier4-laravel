@@ -4,6 +4,7 @@ namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Lab404\Impersonate\Models\Impersonate;
@@ -13,8 +14,8 @@ class User extends Authenticatable
 {
     use HasApiTokens;
     use HasFactory;
-    use Notifiable;
     use Impersonate;
+    use Notifiable;
 
     /**
      * The attributes that are mass assignable.
@@ -44,27 +45,30 @@ class User extends Authenticatable
     ];
 
     /**
-     * The attributes that should be cast.
+     * Get the attributes that should be cast.
      *
-     * @var array<string, string>
+     * @return array<string, string>
      */
-    protected $casts = [
-        'email_verified_at' => 'datetime',
-        'last_login_at' => 'datetime',
-        'is_staff' => 'boolean',
-        'is_admin' => 'boolean',
-        'is_active' => 'boolean',
-        'is_silenced' => 'boolean',
-        'wants_phd_emails' => 'boolean',
-        'wants_postgrad_project_emails' => 'boolean',
-    ];
+    protected function casts(): array
+    {
+        return [
+            'email_verified_at' => 'datetime',
+            'last_login_at' => 'datetime',
+            'is_staff' => 'boolean',
+            'is_admin' => 'boolean',
+            'is_active' => 'boolean',
+            'is_silenced' => 'boolean',
+            'wants_phd_emails' => 'boolean',
+            'wants_postgrad_project_emails' => 'boolean',
+        ];
+    }
 
-    public function meetings()
+    public function meetings(): HasMany
     {
         return $this->hasMany(Meeting::class, 'supervisor_id');
     }
 
-    public function students()
+    public function students(): HasMany
     {
         return $this->hasMany(Student::class, 'supervisor_id');
     }

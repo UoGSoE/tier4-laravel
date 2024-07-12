@@ -2,12 +2,12 @@
 
 namespace App\Console\Commands;
 
+use App\Events\SomethingHappened;
+use App\Mail\ProjectStudentReminder;
+use App\Mail\StaffOverdueMeeting;
 use App\Models\User;
 use Illuminate\Console\Command;
-use App\Events\SomethingHappened;
-use App\Mail\StaffOverdueMeeting;
 use Illuminate\Support\Collection;
-use App\Mail\ProjectStudentReminder;
 use Illuminate\Support\Facades\Mail;
 
 class NotifyStaffOverdueMeetings extends Command
@@ -73,7 +73,7 @@ class NotifyStaffOverdueMeetings extends Command
             }
         }
 
-        if (!$shouldSendToday) {
+        if (! $shouldSendToday) {
             return;
         }
 

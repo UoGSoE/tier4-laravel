@@ -137,7 +137,7 @@ class ReportTest extends TestCase
     }
 
     /** @test */
-    public function admins_can_export_the_current_list_of_students_as_an_excel_file()
+    public function admins_can_export_the_current_list_of_students_as_an_excel_file(): void
     {
         $admin = User::factory()->admin()->create();
         $staff1 = User::factory()->create(['surname' => 'zzzzzzzzz']);
@@ -156,11 +156,11 @@ class ReportTest extends TestCase
         Livewire::actingAs($admin)->test('students-meetings-report', ['type' => Student::TYPE_POSTGRAD_PROJECT])
             ->set('filter', 'qqqqqqq')
             ->call('exportExcel')
-            ->assertFileDownloaded('students-meetings-report-' . now()->format('Y-m-d') . '.xlsx');
+            ->assertFileDownloaded('students-meetings-report-'.now()->format('Y-m-d').'.xlsx');
     }
 
     /** @test */
-    public function admins_can_change_the_column_and_direction_that_is_used_to_sort_the_list_of_students()
+    public function admins_can_change_the_column_and_direction_that_is_used_to_sort_the_list_of_students(): void
     {
         $admin = User::factory()->admin()->create();
         $staff1 = User::factory()->create(['surname' => 'zzzzzzzzz']);
@@ -218,8 +218,6 @@ class ReportTest extends TestCase
                 $overdueStudent1->email,
                 $overdueStudent2->email,
             ]);
-
-
 
     }
 
@@ -343,7 +341,7 @@ class ReportTest extends TestCase
     }
 
     /** @test */
-    public function setting_the_filter_to_multiple_whitespaces_doesnt_trigger_filtering()
+    public function setting_the_filter_to_multiple_whitespaces_doesnt_trigger_filtering(): void
     {
         $admin = User::factory()->admin()->create();
         $staff1 = User::factory()->create(['surname' => 'staff1']);
@@ -370,5 +368,4 @@ class ReportTest extends TestCase
             ->assertSee($student2->full_name)
             ->assertSee($student3->full_name);
     }
-
 }

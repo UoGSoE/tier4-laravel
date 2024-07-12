@@ -14,6 +14,7 @@ use Illuminate\Support\Str;
 class ImportOldTier4 extends Command
 {
     protected $oldUserIdMap = [];
+
     protected $oldStudentIdMap = [];
 
     /**
@@ -141,6 +142,7 @@ class ImportOldTier4 extends Command
                 ->first();
             if ($existingMeeting) {
                 $this->info("Skipping meeting for student {$oldMeeting->student_id} on {$meetingDate} as already exists");
+
                 continue;
             }
             $newMeeting = new Meeting();

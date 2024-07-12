@@ -115,7 +115,7 @@ class ImportOldTier4DataTest extends TestCase
     }
 
     /** @test */
-    public function importing_the_same_data_twice_doesnt_duplicate_it()
+    public function importing_the_same_data_twice_doesnt_duplicate_it(): void
     {
         $this->artisan('tier4:importoldtier4');
         $this->artisan('tier4:importoldtier4');
@@ -127,7 +127,7 @@ class ImportOldTier4DataTest extends TestCase
     }
 
     /** @test */
-    public function importing_old_data_when_there_is_existing_data_doesnt_create_duplicates()
+    public function importing_old_data_when_there_is_existing_data_doesnt_create_duplicates(): void
     {
         $existingStudent = Student::factory()->create([
             'username' => '1234567s',
@@ -156,13 +156,12 @@ class ImportOldTier4DataTest extends TestCase
         $this->assertDatabaseCount('student_notes', 1);
     }
 
-
     protected function setUpFakeDatabase()
     {
         config([
             'database.connections.oldtier4' => [
                 'driver' => 'sqlite',
-                'url' => env('DATABASE_URL'),
+                'url' => env('DB_URL'),
                 'database' => base_path().'/tests/fixtures/oldtier4.sqlite',
                 'prefix' => '',
                 'foreign_key_constraints' => env('DB_FOREIGN_KEYS', true),

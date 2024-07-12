@@ -47,7 +47,7 @@ class OptionsController extends Controller
         ]);
 
         foreach (range(1, 5) as $i) {
-            $fieldName = 'postgrad_project_email_date_' . $i;
+            $fieldName = 'postgrad_project_email_date_'.$i;
             if ($request->filled($fieldName)) {
                 option([$fieldName => Carbon::createFromFormat('d/m/Y', $request->input($fieldName))->format('Y-m-d')]);
             } else {

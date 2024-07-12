@@ -2,17 +2,16 @@
 
 namespace App\Jobs;
 
-use App\Models\User;
 use App\Models\Student;
-use Illuminate\Support\Str;
+use App\Models\User;
 use Illuminate\Bus\Queueable;
-use Illuminate\Support\Facades\Mail;
-use Illuminate\Queue\SerializesModels;
-use Illuminate\Queue\InteractsWithQueue;
-use Illuminate\Support\Facades\Validator;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
-use Illuminate\Contracts\Queue\ShouldBeUnique;
+use Illuminate\Queue\InteractsWithQueue;
+use Illuminate\Queue\SerializesModels;
+use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Str;
 
 class ImportProjectStudents implements ShouldQueue
 {
@@ -64,7 +63,8 @@ class ImportProjectStudents implements ShouldQueue
             }
 
             if ($validator->fails()) {
-                $errors[] = "Row {$excelRowNumber}: " . implode(', ', $validator->errors()->all());
+                $errors[] = "Row {$excelRowNumber}: ".implode(', ', $validator->errors()->all());
+
                 continue;
             }
 
@@ -75,15 +75,16 @@ class ImportProjectStudents implements ShouldQueue
                 $ldapUser = \Ohffs\Ldap\LdapFacade::findUserByEmail(strtolower(trim($validatedData['supervisor_email'])));
                 if (! $ldapUser) {
                     $errors[] = "Row {$excelRowNumber}: Could not find supervisor with email {$validatedData['supervisor_email']}";
+
                     continue;
                 }
                 $supervisor = new User();
                 $supervisor->username = $ldapUser->username;
                 $supervisor->password = bcrypt(Str::random(64));
                 $supervisor->email = strtolower(trim($validatedData['supervisor_email']));
-                $nameParts = explode(" ", Str::squish($validatedData['supervisor_name']));
+                $nameParts = explode(' ', Str::squish($validatedData['supervisor_name']));
                 $supervisor->surname = array_pop($nameParts);
-                $supervisor->forenames = implode(" ", $nameParts);
+                $supervisor->forenames = implode(' ', $nameParts);
                 $supervisor->is_staff = true;
                 $supervisor->save();
             }
@@ -97,7 +98,7 @@ class ImportProjectStudents implements ShouldQueue
             if (! $student) {
                 $student = new Student();
                 $student->email = $email;
-                $student->username = $validatedData['matric'] . strtolower($validatedData['surname'][0]);
+                $student->username = $validatedData['matric'].strtolower($validatedData['surname'][0]);
                 $student->forenames = $validatedData['forenames'];
                 $student->surname = $validatedData['surname'];
                 $student->type = Student::TYPE_POSTGRAD_PROJECT;

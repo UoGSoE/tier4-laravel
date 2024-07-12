@@ -26,7 +26,7 @@ class TrimActivityTable extends Command
      */
     public function handle(): void
     {
-        $days = config('tier4.activity_table_trim_days', 6*30);
+        $days = config('tier4.activity_table_trim_days', 6 * 30);
         $this->info("Trimming activity table to $days days");
 
         Activity::where('created_at', '<', now()->subDays($days))->delete();

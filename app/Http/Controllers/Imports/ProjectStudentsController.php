@@ -3,9 +3,9 @@
 namespace App\Http\Controllers\Imports;
 
 use App\Events\SomethingHappened;
-use Illuminate\Http\Request;
-use App\Jobs\ImportProjectStudents;
 use App\Http\Controllers\Controller;
+use App\Jobs\ImportProjectStudents;
+use Illuminate\Http\Request;
 
 class ProjectStudentsController extends Controller
 {

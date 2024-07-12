@@ -2,10 +2,9 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Http\Controllers\Controller;
 use App\Models\Activity;
 use Illuminate\View\View;
-use Illuminate\Http\Request;
-use App\Http\Controllers\Controller;
 
 class ActivityController extends Controller
 {
@@ -15,5 +14,4 @@ class ActivityController extends Controller
             'activity' => Activity::latest()->paginate(100),
         ]);
     }
-
 }

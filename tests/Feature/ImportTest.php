@@ -2,20 +2,18 @@
 
 namespace Tests\Feature;
 
-use Tests\TestCase;
-use App\Models\User;
-use App\Models\Student;
-use Illuminate\Http\UploadedFile;
-use Ohffs\SimpleSpout\ExcelSheet;
-use Ohffs\Ldap\FakeLdapConnection;
 use App\Jobs\ImportProjectStudents;
-use Illuminate\Support\Facades\Http;
+use App\Mail\ImportProjectStudentsComplete;
+use App\Models\Student;
+use App\Models\User;
+use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Queue;
 use Ohffs\Ldap\LdapConnectionInterface;
-use App\Mail\ImportProjectStudentsComplete;
-use Illuminate\Foundation\Testing\RefreshDatabase;
 use Ohffs\Ldap\LdapUser;
+use Ohffs\SimpleSpout\ExcelSheet;
+use Tests\TestCase;
 
 class ImportTest extends TestCase
 {
@@ -110,7 +108,7 @@ class ImportTest extends TestCase
     }
 
     /** @test */
-    public function admins_can_see_the_project_students_upload_page() : void
+    public function admins_can_see_the_project_students_upload_page(): void
     {
         $admin = User::factory()->admin()->create();
 
@@ -131,7 +129,7 @@ class ImportTest extends TestCase
     }
 
     /** @test */
-    public function admins_can_upload_the_project_students_from_their_mycampus_export()
+    public function admins_can_upload_the_project_students_from_their_mycampus_export(): void
     {
         Queue::fake();
         $admin = User::factory()->admin()->create();
@@ -148,7 +146,7 @@ class ImportTest extends TestCase
     }
 
     /** @test */
-    public function the_import_project_students_job_does_the_right_stuff()
+    public function the_import_project_students_job_does_the_right_stuff(): void
     {
         Mail::fake();
         $this->fakeLdapConnection();
@@ -159,7 +157,7 @@ class ImportTest extends TestCase
         $this->assertEquals(6, Student::count());
 
         collect($this->getGoodProjectRows())->each(fn ($row) => $this->assertDatabaseHas('students', [
-            'username' => $row[0] . strtolower($row[1][0]),
+            'username' => $row[0].strtolower($row[1][0]),
             'surname' => $row[1],
             'forenames' => $row[2],
             'email' => strtolower($row[14]),
@@ -174,7 +172,7 @@ class ImportTest extends TestCase
     }
 
     /** @test */
-    public function the_import_project_students_job_logs_errors_on_malformed_data()
+    public function the_import_project_students_job_logs_errors_on_malformed_data(): void
     {
         Mail::fake();
         $this->fakeLdapConnection();
@@ -185,17 +183,17 @@ class ImportTest extends TestCase
 
         Mail::assertQueued(ImportProjectStudentsComplete::class, function ($mail) {
             return $mail->hasTo('admin@example.com') && count($mail->errors) == 6 &&
-                $mail->errors[0] == "Row 2: The matric field is required." &&
-                $mail->errors[1] == "Row 3: The supervisor email field must be a valid email address." &&
-                $mail->errors[2] == "Row 4: The matric field must be an integer." &&
-                $mail->errors[3] == "Row 5: The email field is required." &&
-                $mail->errors[4] == "Row 6: The forenames field is required." &&
-                $mail->errors[5] == "Row 7: The email field must be a valid email address.";
+                $mail->errors[0] == 'Row 2: The matric field is required.' &&
+                $mail->errors[1] == 'Row 3: The supervisor email field must be a valid email address.' &&
+                $mail->errors[2] == 'Row 4: The matric field must be an integer.' &&
+                $mail->errors[3] == 'Row 5: The email field is required.' &&
+                $mail->errors[4] == 'Row 6: The forenames field is required.' &&
+                $mail->errors[5] == 'Row 7: The email field must be a valid email address.';
         });
     }
 
     /** @test */
-    public function the_import_project_students_job_doesnt_duplicate_existing_records()
+    public function the_import_project_students_job_doesnt_duplicate_existing_records(): void
     {
         Mail::fake();
         $this->fakeLdapConnection();
@@ -231,12 +229,12 @@ class ImportTest extends TestCase
     {
         return [
             // ["Matric","Surname","Forenames","Supervisor Name","Supervisor Email","Programme code","Programme Name","Whatever","Load","Status","Credits","Fully Reg","Acad Reg","Fin Reg","Email"],
-            ["2273664","Smith","Jenny","Brian MacDunnie","fred.smith@example.com","H6N1-5200","Bachelor of Engineering","Enrollment","Full-Time","International","180","Y","Y","Y","2451294s@example.com"],
-            ["2273665","Jones","Tom","Sarah Johnson","penny.lane@example.com","H6N1-5200","Bachelor of Engineering","Enrollment","Full-Time","International","180","Y","Y","Y","2273665j@example.com"],
-            ["2273666","Brown","Charlie","John Smith","mario.cart@example.com","H6N1-5200","Bachelor of Engineering","Enrollment","Full-Time","International","180","Y","Y","Y","charlie@example.com"],
-            ["2273667","Doe","Jane","Mary Johnson","julia.smith@example.com","H6N1-5200","Bachelor of Engineering","Enrollment","Full-Time","International","180","Y","Y","Y","jane@example.com"],
-            ["2273668","Garcia","Maria","David Rodriguez","julia.smith@example.com","H6N1-5200","Bachelor of Engineering","Enrollment","Full-Time","International","180","Y","Y","Y","maria@example.com"],
-            ["2273669","Kim","Jin","Soo Lee","fred.smith@example.com","H6N1-5200","Elec & Elec Eng & Mgt,MSc","Enrollment","Full-Time","International","180","Y","Y","Y","jin@example.com"]
+            ['2273664', 'Smith', 'Jenny', 'Brian MacDunnie', 'fred.smith@example.com', 'H6N1-5200', 'Bachelor of Engineering', 'Enrollment', 'Full-Time', 'International', '180', 'Y', 'Y', 'Y', '2451294s@example.com'],
+            ['2273665', 'Jones', 'Tom', 'Sarah Johnson', 'penny.lane@example.com', 'H6N1-5200', 'Bachelor of Engineering', 'Enrollment', 'Full-Time', 'International', '180', 'Y', 'Y', 'Y', '2273665j@example.com'],
+            ['2273666', 'Brown', 'Charlie', 'John Smith', 'mario.cart@example.com', 'H6N1-5200', 'Bachelor of Engineering', 'Enrollment', 'Full-Time', 'International', '180', 'Y', 'Y', 'Y', 'charlie@example.com'],
+            ['2273667', 'Doe', 'Jane', 'Mary Johnson', 'julia.smith@example.com', 'H6N1-5200', 'Bachelor of Engineering', 'Enrollment', 'Full-Time', 'International', '180', 'Y', 'Y', 'Y', 'jane@example.com'],
+            ['2273668', 'Garcia', 'Maria', 'David Rodriguez', 'julia.smith@example.com', 'H6N1-5200', 'Bachelor of Engineering', 'Enrollment', 'Full-Time', 'International', '180', 'Y', 'Y', 'Y', 'maria@example.com'],
+            ['2273669', 'Kim', 'Jin', 'Soo Lee', 'fred.smith@example.com', 'H6N1-5200', 'Elec & Elec Eng & Mgt,MSc', 'Enrollment', 'Full-Time', 'International', '180', 'Y', 'Y', 'Y', 'jin@example.com'],
         ];
     }
 
@@ -244,19 +242,19 @@ class ImportTest extends TestCase
     {
         return [
             // header row - should _not_ be logged as an error
-            ["Matric","Surname","Forenames","Supervisor Name","Supervisor Email","Programme code","Programme Name","Whatever","Load","Status","Credits","Fully Reg","Acad Reg","Fin Reg","Email"],
+            ['Matric', 'Surname', 'Forenames', 'Supervisor Name', 'Supervisor Email', 'Programme code', 'Programme Name', 'Whatever', 'Load', 'Status', 'Credits', 'Fully Reg', 'Acad Reg', 'Fin Reg', 'Email'],
             // missing matric
-            ["","Smith","Jenny","Brian MacDunnie","fred.smith@example.com","H6N1-5200","Bachelor of Engineering","Enrollment","Full-Time","International","180","Y","Y","Y","jenny@example.com"],
+            ['', 'Smith', 'Jenny', 'Brian MacDunnie', 'fred.smith@example.com', 'H6N1-5200', 'Bachelor of Engineering', 'Enrollment', 'Full-Time', 'International', '180', 'Y', 'Y', 'Y', 'jenny@example.com'],
             // invalid supervisor email
-            ["2273665","Jones","Tom","Sarah Johnson","sarah@","H6N1-5200","Bachelor of Engineering","Enrollment","Full-Time","International","180","Y","Y","Y","tom@example.com"],
+            ['2273665', 'Jones', 'Tom', 'Sarah Johnson', 'sarah@', 'H6N1-5200', 'Bachelor of Engineering', 'Enrollment', 'Full-Time', 'International', '180', 'Y', 'Y', 'Y', 'tom@example.com'],
             // invalid matric
-            ["hello","Brown","Charlie","John Smith","penny.lane@example.com","H6N1-5200","Bachelor of Engineering","Enrollment","Full-Time","International","180","Y","Y","Y","charlie@example.com"],
+            ['hello', 'Brown', 'Charlie', 'John Smith', 'penny.lane@example.com', 'H6N1-5200', 'Bachelor of Engineering', 'Enrollment', 'Full-Time', 'International', '180', 'Y', 'Y', 'Y', 'charlie@example.com'],
             // missing student email
-            ["2273667","Doe","Jane","Mary Johnson","fred.smith@example.com","H6N1-5200","Bachelor of Engineering","Enrollment","Full-Time","International","180","Y","Y","Y",""],
+            ['2273667', 'Doe', 'Jane', 'Mary Johnson', 'fred.smith@example.com', 'H6N1-5200', 'Bachelor of Engineering', 'Enrollment', 'Full-Time', 'International', '180', 'Y', 'Y', 'Y', ''],
             // missing forename
-            ["2273668","Garcia","","David Rodriguez","penny.lane@example.com","H6N1-5200","Bachelor of Engineering","Enrollment","Full-Time","International","180","Y","Y","Y","maria@example.com"],
+            ['2273668', 'Garcia', '', 'David Rodriguez', 'penny.lane@example.com', 'H6N1-5200', 'Bachelor of Engineering', 'Enrollment', 'Full-Time', 'International', '180', 'Y', 'Y', 'Y', 'maria@example.com'],
             // invalid student email
-            ["2273669","Kim","Jin","Soo Lee","penny.lane@example.com","H6N1-5200","Elec & Elec Eng & Mgt,MSc","Enrollment","Full-Time","International","180","Y","Y","Y","jin@"]
+            ['2273669', 'Kim', 'Jin', 'Soo Lee', 'penny.lane@example.com', 'H6N1-5200', 'Elec & Elec Eng & Mgt,MSc', 'Enrollment', 'Full-Time', 'International', '180', 'Y', 'Y', 'Y', 'jin@'],
         ];
     }
 
@@ -283,7 +281,7 @@ class ImportLdapConnectionFake implements LdapConnectionInterface
 
     public function findUserByEmail(string $email)
     {
-        return match($email) {
+        return match ($email) {
             'fred.smith@example.com' => new LdapUser([
                 0 => [
                     'uid' => ['fred.smith'],

@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class Meeting extends Model
 {
@@ -15,16 +16,19 @@ class Meeting extends Model
         'meeting_at',
     ];
 
-    protected $casts = [
-        'meeting_at' => 'date:Y-m-d',
-    ];
+    protected function casts(): array
+    {
+        return [
+            'meeting_at' => 'date:Y-m-d',
+        ];
+    }
 
-    public function supervisor()
+    public function supervisor(): BelongsTo
     {
         return $this->belongsTo(User::class, 'supervisor_id');
     }
 
-    public function student()
+    public function student(): BelongsTo
     {
         return $this->belongsTo(Student::class, 'student_id');
     }

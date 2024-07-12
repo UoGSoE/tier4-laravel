@@ -6,6 +6,9 @@ use App\Proxies\CachedOption;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 
 class Student extends Model
 {
@@ -16,6 +19,7 @@ class Student extends Model
     public const TYPE_PHD = 'phd';
 
     public const SUB_TYPE_MSC = 'msc';
+
     public const SUB_TYPE_BMENG = 'bmeng';
 
     protected $fillable = [
@@ -31,33 +35,36 @@ class Student extends Model
         'last_alerted_about',
     ];
 
-    protected $casts = [
-        'is_active' => 'boolean',
-        'is_silenced' => 'boolean',
-        'last_alerted_about' => 'datetime',
-    ];
+    protected function casts(): array
+    {
+        return [
+            'is_active' => 'boolean',
+            'is_silenced' => 'boolean',
+            'last_alerted_about' => 'datetime',
+        ];
+    }
 
-    public function supervisor()
+    public function supervisor(): BelongsTo
     {
         return $this->belongsTo(User::class, 'supervisor_id');
     }
 
-    public function meetings()
+    public function meetings(): HasMany
     {
         return $this->hasMany(Meeting::class, 'student_id');
     }
 
-    public function latestMeeting()
+    public function latestMeeting(): HasOne
     {
         return $this->hasOne(Meeting::class, 'student_id')->latestOfMany('meeting_at');
     }
 
-    public function notes()
+    public function notes(): HasMany
     {
         return $this->hasMany(StudentNote::class);
     }
 
-    public function latestNote()
+    public function latestNote(): HasOne
     {
         return $this->hasOne(StudentNote::class)->latestOfMany('updated_at');
     }
@@ -181,5 +188,4 @@ class Student extends Model
     {
         $this->update(['last_alerted_about' => now()]);
     }
-
 }

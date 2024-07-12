@@ -4,8 +4,6 @@ namespace App\Listeners;
 
 use App\Events\SomethingHappened;
 use App\Models\Activity;
-use Illuminate\Contracts\Queue\ShouldQueue;
-use Illuminate\Queue\InteractsWithQueue;
 
 class RecordThatSomethingHappened
 {

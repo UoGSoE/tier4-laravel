@@ -17,6 +17,7 @@ class StudentsMeetingsReport extends Component
     public $onlyOverdue = true;
 
     public $sortField = 'surname';
+
     public $sortDirection = 'asc';
 
     protected $queryString = ['type', 'filter', 'includeInactive' => ['except' => false], 'onlyOverdue' => ['except' => true]];
@@ -44,8 +45,8 @@ class StudentsMeetingsReport extends Component
                 strlen(trim($this->filter)) > 2,
                 fn ($query) => $query->where(
                     fn ($query) => $query->where('email', 'like', "%{$this->filter}%")
-                                    ->orWhere('surname', 'like', "%{$this->filter}%")
-                                    ->orWhere('forenames', 'like', "%{$this->filter}%")
+                        ->orWhere('surname', 'like', "%{$this->filter}%")
+                        ->orWhere('forenames', 'like', "%{$this->filter}%")
                 )
             )
             ->when(! $this->includeInactive, fn ($query) => $query->active())
@@ -76,7 +77,7 @@ class StudentsMeetingsReport extends Component
 
     public function exportExcel()
     {
-        $filename = "students-meetings-report-" . now()->format('Y-m-d') . '.xlsx';
+        $filename = 'students-meetings-report-'.now()->format('Y-m-d').'.xlsx';
 
         $rows = [];
         $rows[] = ['Matric', 'Surname', 'Forenames', 'Supervisor', 'Last Meeting'];
@@ -88,11 +89,10 @@ class StudentsMeetingsReport extends Component
                 $student->supervisor?->fullName,
                 $student->latestMeeting?->meeting_at->format('d/m/Y'),
             ];
-        };
+        }
 
         $sheet = (new ExcelSheet())->generate($rows);
 
         return response()->download($sheet, $filename)->deleteFileAfterSend(true);
     }
-
 }

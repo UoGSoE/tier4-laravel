@@ -2,15 +2,14 @@
 
 namespace Tests\Feature;
 
-use Carbon\Carbon;
-use Tests\TestCase;
-use App\Models\User;
-use App\Models\Student;
-use App\Mail\StaffOverdueMeeting;
 use App\Mail\ProjectStudentReminder;
-use Illuminate\Support\Facades\Mail;
+use App\Mail\StaffOverdueMeeting;
+use App\Models\Student;
+use App\Models\User;
+use Carbon\Carbon;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use App\Console\Commands\NotifyStaffOverdueMeetings;
+use Illuminate\Support\Facades\Mail;
+use Tests\TestCase;
 
 class StaffNotificationTest extends TestCase
 {
@@ -29,7 +28,7 @@ class StaffNotificationTest extends TestCase
     }
 
     /** @test */
-    public function the_command_to_notify_staff_is_registered_with_laravel()
+    public function the_command_to_notify_staff_is_registered_with_laravel(): void
     {
         $this->assertCommandIsScheduled(\App\Console\Commands\NotifyStaffOverdueMeetings::class);
     }
@@ -87,7 +86,7 @@ class StaffNotificationTest extends TestCase
     }
 
     /** @test */
-    public function staff_are_only_notified_about_phd_students_at_most_once_a_week()
+    public function staff_are_only_notified_about_phd_students_at_most_once_a_week(): void
     {
         Mail::fake();
         config(['tier4.days_between_renotifications' => 7]);
