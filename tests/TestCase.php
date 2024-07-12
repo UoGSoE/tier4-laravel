@@ -6,7 +6,6 @@ use Illuminate\Foundation\Testing\TestCase as BaseTestCase;
 
 abstract class TestCase extends BaseTestCase
 {
-
     /**
      * Asserts that a command is registered with the console kernel schedular.
      *
